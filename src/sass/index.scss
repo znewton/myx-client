@@ -1,5 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800');
+
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  position: fixed;
+  box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+* {
+  position: relative;
+  box-sizing: border-box;
 }
