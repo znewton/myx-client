@@ -1,0 +1,76 @@
+@import "../sass/globals";
+@import "../sass/mixin";
+
+.Queue {
+  @include scrollbars(0.5em, #222);
+  position: fixed;
+  height: $queue_height;
+  left: $sidebar_width;
+  bottom: 0;
+  width: 100vw-$sidebar_width;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  .wrapper {
+    height: 100%;
+    vertical-align: top;
+  }
+  div.li {
+    display: inline-block;
+    white-space: normal;
+    width: $queue_height*4/5 + 20vh;
+    height: $queue_height*4/5;
+    margin-top: $queue_height/20;
+    margin-left: 0.75em;
+    background-color: #3e3e3e;
+    color: #bebebe;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover {
+      background-color: #444;
+      box-shadow: 2px 3px 6px rgba(black, 0.3);
+      cursor: pointer;
+    }
+    .thumbnail {
+      vertical-align: top;
+      display: inline-block;
+      height: 0;
+      width: $queue_height*4/5;
+      padding-bottom: $queue_height*4/5;
+      background-color: #2e2e2e;
+    }
+    .info {
+      vertical-align: top;
+      display: inline-block;
+      width: 20vh;
+      padding: 0.5em 0.75em;
+      text-overflow: ellipsis;
+    }
+    .title {
+      height: 20%;
+      font-size: 1.2em;
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      white-space: nowrap;
+    }
+    .duration {
+      font-size: 0.75em;
+      font-weight: 400;
+    }
+    .description {
+      height: 80%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      white-space: nowrap;
+    }
+  }
+}
+
+.Queue, .Queue .wrapper {
+  transform:rotateX(180deg);
+  -ms-transform:rotateX(180deg); /* IE 9 */
+  -webkit-transform:rotateX(180deg); /* Safari and Chrome */
+}

@@ -3,6 +3,8 @@ import './sass/App.css';
 
 import Navbar from './Navbar/Navbar';
 import Sidebar from './Sidebar/Sidebar';
+import Player from './Player/Player';
+import Queue from './Queue/Queue';
 
 class App extends Component {
   render() {
@@ -10,8 +12,8 @@ class App extends Component {
       <div className="App">
         <Navbar />
         <Sidebar />
-        {/* <Player /> */}
-        {/* <Queue /> */}
+        <Player />
+        <Queue />
       </div>
     );
   }

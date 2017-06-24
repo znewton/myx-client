@@ -49,10 +49,10 @@
     }
     &.blue {
       color: #eee;
-      background-color: $blue;
+      background-color: darken($blue, 5%);
       &:hover {
         color: #fff;
-        background-color: darken($blue, 5%);
+        background-color: $blue;
       }
     }
   }
