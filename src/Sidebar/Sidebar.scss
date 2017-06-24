@@ -29,6 +29,9 @@
     }
     .description {
       text-overflow: ellipsis;
+      .span:not(:last-of-type)::after {
+        content: ", ";
+      }
     }
   }
 }
