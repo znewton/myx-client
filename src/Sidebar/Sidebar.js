@@ -6,12 +6,11 @@ export default class Sidebar extends Component {
   render () {
     return (
       <div className="Sidebar">
-        {[1,2,3,4,5,6,7,8,9,10].map(i => (
-          <div className="li" key={i}>
-            <div className="title">Mix {i}</div>
+        {this.props.mixes.map(mix => (
+          <div className="li" key={mix.id} onClick={() => this.props.onSelect(mix.id)}>
+            <div className="title">{mix.title}</div>
             <div className="description">
-              &nbsp;&nbsp;&nbsp;
-              lisjkhfd, losjh fglsd, isurghi, slirgh hdkdf
+              channels here
             </div>
           </div>
         ))}
@@ -20,6 +19,12 @@ export default class Sidebar extends Component {
   }
 }
 
-Sidebar.propTypes = {}
+Sidebar.propTypes = {
+  mixes: PropTypes.array
+  onSelect: PropTypes.func
+}
 
-Sidebar.defaultProps = {}
+Sidebar.defaultProps = {
+  mixes: [],
+  onSelect: () => {}
+}

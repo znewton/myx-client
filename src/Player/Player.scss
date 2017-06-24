@@ -10,7 +10,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  .Video {
+  & > * {
     flex: 1 100%;
+  }
+  & > .emptyMessage {
+    color: #4e4e4e;
   }
 }
