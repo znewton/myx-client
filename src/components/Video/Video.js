@@ -32,6 +32,9 @@ export default class Video extends Component {
 	      height: size*9/16,
 	      width: size,
 	      videoId: this.props.id,
+				playerVars: {
+					color: 'white'
+				},
 				events: {
 					'onReady': onPlayerReady,
 					'onStateChange': onPlayerStateChange
