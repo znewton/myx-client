@@ -70,6 +70,7 @@ function updatePosition(element, from) {
     case BOTTOMRIGHT:
       newPosition = {bottom: box.top, right: window.innerWidth -  box.right}
       break;
+    default:
   }
   newPosition.origin = updateOrigin(from);
   return newPosition;

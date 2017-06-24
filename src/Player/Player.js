@@ -23,7 +23,7 @@ export default class Player extends Component {
 Player.propTypes = {
   onEnd: PropTypes.func,
   id: PropTypes.string,
-  emptyMessage: PropTypes.oneOf([
+  emptyMessage: PropTypes.oneOfType([
     PropTypes.element,
     PropTypes.string
   ])

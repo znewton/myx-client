@@ -1,0 +1,50 @@
+@import "../../sass/globals";
+@import "../../sass/mixins";
+
+.Auth {
+  text-align: center;
+  margin-bottom: 1em;
+  margin-top: 1em;
+  input {
+    border: none;
+    border-bottom: 1px solid #ddd;
+    width: 80%;
+    line-height: 1.2em;
+    font-size: 1em;
+    vertical-align: bottom;
+    margin-bottom: 1em;
+    @include placeholder {
+      color: #ddd;
+    };
+    &:focus {
+      outline: none;
+      border-color: $blue;
+    }
+  }
+  .or {
+    color: #aaa;
+    margin: 1em;
+  }
+  .error {
+    color: #da2b35;
+    background-color: rgba(249, 57, 69, 0.38);
+  }
+  .btn {
+    color: #fff;
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: 500;
+    width: 80%;
+    background-color: darken($blue, 5%);
+    border: none;
+    padding: 0.3em 0.5em;
+    transition: all 125ms ease;
+    &:hover:not([disabled]) {
+      cursor: pointer;
+      background-color: $blue;
+    }
+    &[disabled] {
+      opacity: 0.5;
+    }
+  }
+}

@@ -12,23 +12,6 @@
   transform: scale(0);
   @include transition(transform 125ms ease);
   @include box-shadow(1px 1px 6px rgba(black, 0.4));
-  & > * {
-    line-height: 1.5em;
-    display: block;
-    width: 100%;
-    padding: 0.3em 1em;
-    background-color: transparent;
-    // color: $default_text_color;
-    text-align: left;
-    &:hover {
-      background-color: #ddd;
-      color: darken($default_text_color, 7%);
-      cursor: pointer;
-    }
-    .fa {
-      width: 1.5em;
-    }
-  }
   &.open {
     pointer-events: unset;
     transform: scale(1);
