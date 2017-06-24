@@ -13,6 +13,13 @@ export default class Navbar extends Component {
             <Logo />
           </span>
         </div>
+        <div className="nav-right">
+          <span>
+            <button>Log in</button>
+            &nbsp;or&nbsp;
+            <button className="blue">Sign up</button>
+          </span>
+        </div>
       </nav>
     );
   }

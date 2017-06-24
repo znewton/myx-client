@@ -1,8 +1,9 @@
+@import "../../sass/globals";
 .Logo {
   font-size: inherit;
   font-weight: 800;
   .my {
-    color: #1da1f2;
+    color: $blue;
   }
   .xx {
     color: #aaa;
