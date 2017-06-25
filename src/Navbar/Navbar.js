@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import './Navbar.css';
-import fauth from 'firebase/auth';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 import Logo from '../components/Logo/Logo';
 import Auth from './auth/Auth';
@@ -35,7 +36,7 @@ export default class Navbar extends Component {
           </span>
         </div>
         <div className="nav-right">
-          {fauth.currentUser ?
+          {firebase.auth().currentUser ?
             <button className="nav-btn blue"><span className="material-icons">plus</span> create mix</button>
             :
             <span id="authopener">

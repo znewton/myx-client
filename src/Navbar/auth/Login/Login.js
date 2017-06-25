@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import fauth from 'firebase/auth';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import GoogleButton from '../GoogleButton/GoogleButton';
 
 export default class Login extends Component {
@@ -16,15 +17,15 @@ export default class Login extends Component {
   }
   login(custom) {
     if (custom) {
-      fauth.signInWithEmailAndPassword(this.state.email, this.state.password)
+      firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
         .catch(error => this.setState({error: error.message}))
         .then(() => {
-          this.props.close();
+          if (!this.state.error) this.props.close();
         });
     } else {
-      let provider = new fauth.GoogleAuthProvider();
-      fauth.signInWithRedirect(provider);
-      fauth.getRedirectResult().then(result => {
+      let provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithRedirect(provider);
+      firebase.auth().getRedirectResult().then(result => {
         this.props.close();
       }).catch(error => this.setState({error: error.message}))
     }
@@ -33,7 +34,7 @@ export default class Login extends Component {
     return (
       <div className="Login">
         <div>
-          <div className="error">{this.state.error}</div>
+          {this.state.error ? <div className="error">{this.state.error}</div> : null}
           <div>
             <input type="email"
               name="email"
