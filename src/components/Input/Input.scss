@@ -34,14 +34,14 @@ $helper_height: 1em;
     }
   }
   &:checked + label {
-    background-color: desaturate(lighten($like, 40%), 20%);
+    background-color: desaturate(lighten($blue, 40%), 20%);
     &:hover::after {
-      @include box-shadow(0 0 5px rgba($like, 0.3));
+      @include box-shadow(0 0 5px rgba($blue, 0.3));
     }
     &::after {
       transform: translateX(100%);
-      background-color: lighten($like, 10%);
-      @include box-shadow(0 0 3px rgba($like, 0.2));
+      background-color: lighten($blue, 10%);
+      @include box-shadow(0 0 3px rgba($blue, 0.2));
     }
   }
 }
