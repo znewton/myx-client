@@ -8,10 +8,35 @@
   padding: 0.3em 0;
   pointer-events: none;
   color: $default_text_color;
+  border-radius: 3px;
   font-weight: normal;
   transform: scale(0);
   @include transition(transform 125ms ease);
   @include box-shadow(1px 1px 6px rgba(black, 0.4));
+  vertical-align: middle;
+  & > * {
+    vertical-align: middle;
+    padding: none;
+    margin-left: 0 !important;
+    font-family: inherit;
+    font-size: inherit;
+    color: #666;
+    line-height: 1.5em;
+    border: none;
+    display: block;
+    width: 100%;
+    padding: 0.3em 1em;
+    background-color: transparent;
+    text-align: left;
+    .material-icons {
+      width: 1.5em;
+    }
+    &:hover {
+      background-color: #ddd;
+      color: darken($default_text_color, 7%);
+      cursor: pointer;
+    }
+  }
   &.open {
     pointer-events: unset;
     transform: scale(1);

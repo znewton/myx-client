@@ -6,26 +6,57 @@ import 'firebase/auth';
 
 import Logo from '../components/Logo/Logo';
 import Auth from './auth/Auth';
+import Mixer from './mixing/Mixer';
 
 import Modal from '../components/Modal/Modal';
+import DropMenu from '../components/DropMenu/DropMenu';
 import Events from '../lib/Events/Events';
+import Positioning from '../lib/Positioning/Positioning';
 
 export default class Navbar extends Component {
   constructor () {
     super();
     this.state = {
-      authModalOpen: true,
+      authModalOpen: false,
+      settingsMenuOpen: false,
+      createMixOpen: false,
       authType: 'login',
+      loggedIn: false,
     }
   }
-
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({loggedIn: true})
+      } else {
+        this.setState({loggedIn: false});
+      }
+    })
+  }
   handleAuthClick(e, type) {
     e.stopPropagation();
     this.setState({authModalOpen: true, authType: type});
-    Events.addOneTimeEvent(window, 'click', () => this.setState({authModalOpen: false}), 'authModal');
+    Events.addOneTimeEvent(window, 'click', () => this.setState({authModalOpen: false}), 'authModalOpenToggle');
+  }
+  handleSignOut() {
+    firebase.auth().signOut();
+  }
+  toggleMenu(e, name) {
+    if (e) e.stopPropagation();
+    let open = !this.state[`${name}Open`];
+    this.setState({[`${name}Open`]: open});
+    Events.addOneTimeEvent(window, 'click', () => this.setState({[`${name}Open`]: false}), `${name}OpenToggle`);
+  }
+  closeMenu(e, name) {
+    if (e) e.stopPropagation();
+    this.setState({[`${name}Open`]: false});
+    Events.removeOneTimeEvent(`${name}OpenToggle`);
   }
   componentWillUnmount() {
-    Events.removeOneTimeEvent('authModal');
+    const events = ['authModal', 'settingsMenu', 'createMix'];
+    for (let i = 0; i < events.length; i++) {
+      Events.removeOneTimeEvent(`${events[i]}OpenToggle`);
+    }
   }
   render () {
     return (
@@ -37,7 +68,22 @@ export default class Navbar extends Component {
         </div>
         <div className="nav-right">
           {firebase.auth().currentUser ?
-            <button className="nav-btn blue"><span className="material-icons">plus</span> create mix</button>
+            <span>
+              <button className="nav-btn blue" id="create_mix_button" onClick={(e) => this.toggleMenu(e, 'createMix')}><span className="material-icons">add</span><span>create mix</span></button>
+              <Modal
+                header={'Create Mix'}
+                handleClose={(e) => this.closeMenu(e, 'createMix')}
+                open={this.state.createMixOpen}
+                bindTo="#create_mix_button"
+              >
+                <Mixer close={e => this.closeMenu(e, 'createMix')} />
+              </Modal>
+              <button className="icon-btn" id="settings_button" onClick={(e) => this.toggleMenu(e,'settingsMenu')}><span className="material-icons">more_vert</span></button>
+              <DropMenu open={this.state.settingsMenuOpen} from={Positioning.TOPRIGHT} bindTo="#settings_button">
+                {/* <button onClick={(e) => this.closeMenu(e, 'settingsMenu')}><span className="material-icons">settings</span><span>Settings</span></button> */}
+                <button onClick={this.handleSignOut.bind(this)}><span className="material-icons">lock_open</span><span>Sign Out</span></button>
+              </DropMenu>
+            </span>
             :
             <span id="authopener">
               <button className="nav-btn" onClick={(e) => this.handleAuthClick(e, 'login')}>Log in</button>
@@ -45,11 +91,11 @@ export default class Navbar extends Component {
               <button className="nav-btn blue" onClick={(e) => this.handleAuthClick(e, 'signup')}>Sign up</button>
               <Modal
                 header={this.state.authType.charAt(0).toUpperCase() + this.state.authType.slice(1)}
-                handleClose={() => this.setState({authModalOpen: false})}
+                handleClose={(e) => this.closeMenu(e, 'authModal')}
                 open={this.state.authModalOpen}
                 bindTo="#authopener"
               >
-                <Auth type={this.state.authType} close={() => this.setState({authModalOpen: false})} />
+                <Auth type={this.state.authType} close={(e) => this.closeMenu(e, 'authModal')} />
               </Modal>
             </span>
           }
