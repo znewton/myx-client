@@ -1,5 +1,16 @@
 let oneTimeEvents = {};
 
+function debounce(fn, delay) {
+  var timer = null;
+  return function () {
+    var context = this, args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      fn.apply(context, args);
+    }, delay);
+  };
+}
+
 function addEndEventListener(element, event, _callback, timeout) {
   let endTimer;
   element.addEventListener(event, function(evt) {
@@ -32,4 +43,5 @@ module.exports = {
   addEndEventListener,
   addOneTimeEvent,
   removeOneTimeEvent,
+  debounce,
 };

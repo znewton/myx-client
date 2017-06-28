@@ -19,7 +19,7 @@ export default class Navbar extends Component {
     this.state = {
       authModalOpen: false,
       settingsMenuOpen: false,
-      createMixOpen: false,
+      createMixModalOpen: true,
       authType: 'login',
       loggedIn: false,
     }
@@ -45,7 +45,8 @@ export default class Navbar extends Component {
     if (e) e.stopPropagation();
     let open = !this.state[`${name}Open`];
     this.setState({[`${name}Open`]: open});
-    Events.addOneTimeEvent(window, 'click', () => this.setState({[`${name}Open`]: false}), `${name}OpenToggle`);
+    if (!name.toLowerCase().includes('modal'))
+      Events.addOneTimeEvent(window, 'click', () => this.setState({[`${name}Open`]: false}), `${name}OpenToggle`);
   }
   closeMenu(e, name) {
     if (e) e.stopPropagation();
@@ -69,14 +70,14 @@ export default class Navbar extends Component {
         <div className="nav-right">
           {firebase.auth().currentUser ?
             <span>
-              <button className="nav-btn blue" id="create_mix_button" onClick={(e) => this.toggleMenu(e, 'createMix')}><span className="material-icons">add</span><span>create mix</span></button>
+              <button className="nav-btn blue" id="create_mix_button" onClick={(e) => this.toggleMenu(e, 'createMixModal')}><span className="material-icons">add</span><span>create mix</span></button>
               <Modal
                 header={'Create Mix'}
-                handleClose={(e) => this.closeMenu(e, 'createMix')}
-                open={this.state.createMixOpen}
+                handleClose={(e) => this.closeMenu(e, 'createMixModal')}
+                open={this.state.createMixModalOpen}
                 bindTo="#create_mix_button"
               >
-                <Mixer close={e => this.closeMenu(e, 'createMix')} />
+                <Mixer close={e => this.closeMenu(e, 'createMixModal')} />
               </Modal>
               <button className="icon-btn" id="settings_button" onClick={(e) => this.toggleMenu(e,'settingsMenu')}><span className="material-icons">more_vert</span></button>
               <DropMenu open={this.state.settingsMenuOpen} from={Positioning.TOPRIGHT} bindTo="#settings_button">

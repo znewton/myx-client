@@ -1,3 +1,54 @@
+@import "../../sass/mixin";
+@import "../../sass/mixins";
+@import "../../sass/globals";
+
 .Mixer {
-  
+  width: 40em;
+  height: 80vh;
+  @media (max-width: 40em) {
+    width: 90vw;
+  }
+
+  input {
+    padding-left: 1.5em;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    width: 80%;
+    line-height: 1.2em;
+    font-size: 1em;
+    vertical-align: bottom;
+    margin-bottom: 1em;
+    background-color: transparent;
+    @include placeholder {
+      color: #ddd;
+    };
+    &:focus {
+      outline: none;
+      border-color: $blue;
+    }
+  }
+  .searchIcon {
+    color: #ccc;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 1.2em;
+    display: block;
+  }
+  .channels {
+    max-height: 30em;
+    overflow-y: auto;
+  }
+  .channel-result {
+    .channel .thumbnail {
+      display: inline-block;
+      width: 33%;
+    }
+    .channel .info {
+      display: inline-block;
+      width: 66%;
+      padding: 0.5em;
+    }
+  }
+
 }

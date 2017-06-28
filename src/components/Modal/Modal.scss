@@ -12,9 +12,9 @@
   margin: 0;
   overflow: hidden;
   z-index: 10000;
-  line-height: 100vh;
-  vertical-align: middle;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   transform-origin: middle center;
   background-color: transparent;
   transform: scale(0);
@@ -25,13 +25,14 @@
     @include transition(transform 125ms ease, background-color 50ms ease 75ms);
   }
   .modal {
-    display: inline-block;
+    align-self: center;
     line-height: 1em;
     text-align: left;
     min-width: 30vw;
     border-radius: 3px;
     background-color: #fff;
     padding: 0.3em 0.5em;
+    overflow: hidden;
     @include box-shadow(1px 1px 6px rgba(black, 0.3));
     @include bp-large {
       min-width: 60vw;

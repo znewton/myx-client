@@ -31,7 +31,7 @@ export default class Modal extends Component {
         style={{
           transformOrigin: this.state.origin,
         }}
-        onClick={() => this.props.handleClose()}
+        onClick={(e) => this.props.handleClose(e)}
       >
         <div
           className="modal"
