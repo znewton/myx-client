@@ -87,7 +87,27 @@ export default class Mixer extends Component {
     this.setState({currentMix: mix});
   }
   createMix() {
-    console.log(firebase);
+    let newMixRef = firebase.database().ref(`/mixes/${firebase.auth().currentUser.uid}`).push();
+    let mixPlayListKeys = Object.keys(this.state.currentMix);
+    let channels = [];
+    for (let key in this.state.currentMix) {
+      let channelName = this.state.currentMix[key].channel;
+      if (!channels.includes(channelName)) channels.push(channelName);
+    }
+    newMixRef.set({
+      name: this.state.mixName,
+      playlists: mixPlayListKeys,
+      channels: channels
+    });
+    this.setState({
+      searchTerm: '',
+      channels: {},
+      selectedChannel: null,
+      selectedChannelPlaylists: {},
+      currentMix: {},
+      mixName: 'Mix_' + Math.random().toString(36).substring(7)
+    });
+    this.props.close();
   }
   render () {
     const channelKeys = Object.keys(this.state.channels);
@@ -152,7 +172,7 @@ export default class Mixer extends Component {
               let playlist = this.state.currentMix[key];
               return (
                 <div className="playlist-result" key={`mix${key}`}>
-                  <div className="playlist-name"><strong>{playlist.name}</strong> ({playlist.channel})</div>
+                  <div className="playlist-name"><strong>{playlist.name}</strong> ({playlist.channel}sta)</div>
                   <div className="playlist-action" onClick={() => this.removePlaylist(key)}>
                     <span className="material-icons">remove</span>
                   </div>
