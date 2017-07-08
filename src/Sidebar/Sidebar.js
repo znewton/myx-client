@@ -1,44 +1,80 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 import './Sidebar.css';
 
 export default class Sidebar extends Component {
   constructor () {
     super();
     this.state = {
+      mixes: [],
       searchTerm: ''
     }
+  }
+  componentDidMount() {
+    if (firebase.auth().currentUser) {
+      this.setUpList();
+    }
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setUpList();
+      } else {
+        this.setState({mixes: []})
+      }
+    });
+  }
+  setUpList() {
+    let mixesRef = firebase.database().ref(`/mixes/${firebase.auth().currentUser.uid}`);
+    mixesRef.on('child_added', data => {
+      let mixes = this.state.mixes;
+      let mix = data.val();
+      mix.id = data.key;
+      mixes.unshift(mix);
+      this.setState({mixes});
+    });
+    mixesRef.orderByChild('name').once('value', snapshot => {
+      let mixes = [];
+      snapshot.forEach(childSnapshot => {
+        let mix = childSnapshot.val();
+        mix.id = childSnapshot.key;
+        mixes.unshift(mix);
+      });
+      this.setState({mixes});
+    })
   }
   handleSearchChange(event) {
     this.setState({searchTerm: event.target.value});
   }
   render () {
-    let mixes = this.props.mixes;
+    let mixes = this.state.mixes;
     if (this.state.searchTerm) {
       mixes = mixes
         .filter(mix =>
-          mix.title.includes(this.state.searchTerm) ||
+          mix.name.includes(this.state.searchTerm) ||
           mix.channels.filter(channel => channel.includes(this.state.searchTerm)).length);
     }
     return (
       <div className="Sidebar">
-        {this.props.mixes.length > 0 &&
+        {this.state.mixes.length > 0 &&
           <div className="mix-search-wrapper">
+            <span className="material-icons searchIcon">search</span>
             <input
               name="mixes-search"
               placeholder="Search mixes..."
               type="string"
               className="search"
               value={this.state.searchTerm}
-              onChange={this.handleSearchChange} />
+              onChange={this.handleSearchChange.bind(this)} />
           </div>
         }
         <div className="mixes-wrapper">
           {mixes.map(mix => (
             <div className="li" key={mix.id} onClick={() => this.props.onSelect(mix.id)}>
-              <div className="title">{mix.title}</div>
+              <div className="title">{mix.name}</div>
               <div className="description">
-                {mix.channels && mix.channels.map((channel,i) => <span key={i}>{channel}</span>)}
+                {mix.channels && mix.channels.map((channel,i) => <span key={i}>{channel}{i < mix.channels.length-1 && ', '}</span>)}
               </div>
             </div>
           ))}
@@ -49,11 +85,9 @@ export default class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
-  mixes: PropTypes.array,
   onSelect: PropTypes.func
 }
 
 Sidebar.defaultProps = {
-  mixes: [],
   onSelect: () => {}
 }

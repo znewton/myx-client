@@ -19,7 +19,7 @@ export default class Navbar extends Component {
     this.state = {
       authModalOpen: false,
       settingsMenuOpen: false,
-      createMixModalOpen: true,
+      createMixModalOpen: false,
       authType: 'login',
       loggedIn: false,
     }

@@ -13,7 +13,7 @@ export default class Mixer extends Component {
   constructor() {
     super();
     this.state = {
-      searchTerm: 'koala kontrol',
+      searchTerm: '',
       channels: {},
       selectedChannel: null,
       selectedChannelPlaylists: {},
@@ -22,14 +22,12 @@ export default class Mixer extends Component {
     };
     this.search = Events.debounce(this.search, 250);
   }
-  componentDidMount() {
-    this.search();
-  }
   handleSearchInput(value) {
     this.setState({searchTerm: value});
     this.search();
   }
   search() {
+    this.setState({selectedChannel: null, selectedChannelPlaylists: {}})
     if (this.state.searchTerm === '') {
       this.setState({channels: {}});
       return;
@@ -99,6 +97,10 @@ export default class Mixer extends Component {
       playlists: mixPlayListKeys,
       channels: channels
     });
+    this.resetState();
+    this.props.close();
+  }
+  resetState() {
     this.setState({
       searchTerm: '',
       channels: {},
@@ -107,7 +109,6 @@ export default class Mixer extends Component {
       currentMix: {},
       mixName: 'Mix_' + Math.random().toString(36).substring(7)
     });
-    this.props.close();
   }
   render () {
     const channelKeys = Object.keys(this.state.channels);
@@ -172,7 +173,7 @@ export default class Mixer extends Component {
               let playlist = this.state.currentMix[key];
               return (
                 <div className="playlist-result" key={`mix${key}`}>
-                  <div className="playlist-name"><strong>{playlist.name}</strong> ({playlist.channel}sta)</div>
+                  <div className="playlist-name"><strong>{playlist.name}</strong> ({playlist.channel})</div>
                   <div className="playlist-action" onClick={() => this.removePlaylist(key)}>
                     <span className="material-icons">remove</span>
                   </div>

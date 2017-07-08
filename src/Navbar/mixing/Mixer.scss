@@ -55,6 +55,9 @@
       .info {
         @include flex(1 1 75%);
         padding: 0.5em;
+        .channel-title {
+          font-weight: 600;
+        }
       }
       .channel-playlist-toggle {
         @include flex(1 1 6%);
