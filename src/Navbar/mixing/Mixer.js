@@ -34,7 +34,7 @@ export default class Mixer extends Component {
       return;
     }
     let params = queryString.stringify({q: this.state.searchTerm});
-    axios.get(`http://myxx.herokuapp.com/channels?${params}`)
+    axios.get(`https://myxx.herokuapp.com/channels?${params}`)
       .then(response => {
         if (response.data && response.data.length) {
           let channels = {};
@@ -57,7 +57,7 @@ export default class Mixer extends Component {
       return;
     }
     this.setState({selectedChannel: channelId});
-    axios.get(`http://myxx.herokuapp.com/playlists/${channelId}`)
+    axios.get(`https://myxx.herokuapp.com/playlists/${channelId}`)
       .then(response => {
         if (response.data && response.data.length) {
           let playlists = {};

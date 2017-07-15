@@ -48,7 +48,7 @@ class App extends Component {
   getMixSongs (playlists) {
     this.setState({loading: true, currentVideoId: null})
     let params = queryString.stringify({playlists: playlists});
-    axios.get(`http://myxx.herokuapp.com/mix?${params}`)
+    axios.get(`https://myxx.herokuapp.com/mix?${params}`)
       .then(response => {
         if (response.data && response.data.videoMap && response.data.orderedVideoIds) {
           let videoMap = response.data.videoMap;

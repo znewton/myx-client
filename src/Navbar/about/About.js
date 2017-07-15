@@ -61,7 +61,7 @@ export default class About extends Component {
         </p>
         <h3>Back End</h3>
         <p>
-          Documentation for the <Logo /> api endpoints can be found at <a href="http://myxx.herokuapp.com/">myxx.herokuapp.com/</a>.
+          Documentation for the <Logo /> api endpoints can be found at <a href="https://myxx.herokuapp.com/">myxx.herokuapp.com/</a>.
         </p>
         <p>
           The back end is 2 parts: <a href="https://firebase.google.com/">Firebase</a> and <a href="https://nodejs.org/en/">NodeJS</a>.
