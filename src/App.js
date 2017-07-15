@@ -70,7 +70,8 @@ class App extends Component {
   }
   render () {
     let queue = [];
-    if (!this.state.loading && this.currentMix !== this.state.selectedMixId && this.state.selectedMixOrderedVideos.length) {
+    // TODO: Re-optimize this
+    // if (!this.state.loading && this.currentMix !== this.state.selectedMixId && this.state.selectedMixOrderedVideos.length) {
       queue = this.state.selectedMixOrderedVideos.map(id => {
         let video = this.state.selectedMixVideoMap[id];
         return {
@@ -81,7 +82,7 @@ class App extends Component {
         }
       });
       this.currentMix = this.state.selectedMixId;
-    }
+    // }
     let playerPlaceholder = <h1>Select or Create a Mix</h1>;
     if (this.state.loggedIn) {
       if (this.state.loading) {
