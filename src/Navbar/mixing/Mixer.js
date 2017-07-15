@@ -14,6 +14,7 @@ export default class Mixer extends Component {
     super();
     this.state = {
       searchTerm: '',
+      searching: false,
       channels: {},
       selectedChannel: null,
       selectedChannelPlaylists: {},
@@ -27,9 +28,9 @@ export default class Mixer extends Component {
     this.search();
   }
   search() {
-    this.setState({selectedChannel: null, selectedChannelPlaylists: {}})
+    this.setState({searching: true, selectedChannel: null, selectedChannelPlaylists: {}})
     if (this.state.searchTerm === '') {
-      this.setState({channels: {}});
+      this.setState({searching: false, channels: {}});
       return;
     }
     let params = queryString.stringify({q: this.state.searchTerm});
@@ -45,7 +46,7 @@ export default class Mixer extends Component {
               thumbnail: channel.thumbnails.default.url
             }
           }
-          this.setState({channels: channels});
+          this.setState({searching: false, channels: channels});
         }
       })
       .catch(error => console.log(error));
@@ -164,7 +165,9 @@ export default class Mixer extends Component {
                     }
                   </div>
               )})
-              : <div className="channel-empty-state">No Results</div>}
+              : (this.state.searching ?
+                <div className="channel-empty-state loading-dots">Searching</div>
+                : <div className="channel-empty-state">No Results</div>)}
           </div>
         </div>
         {mixKeys.length > 0 &&

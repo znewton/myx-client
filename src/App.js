@@ -21,7 +21,18 @@ class App extends Component {
       selectedMixVideoMap: {},
       selectedVideo: null,
       currentVideoId: null,
+      loggedIn: false,
     };
+    this.currentMix = null;
+  }
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({loggedIn: true});
+      } else {
+        this.setState({loggedIn: false});
+      }
+    });
   }
   handleMixSelect (mixId) {
     let mixRef = firebase.database().ref(`/mixes/${firebase.auth().currentUser.uid}/${mixId}`);
@@ -35,6 +46,7 @@ class App extends Component {
     }).catch(error => console.log(error));
   }
   getMixSongs (playlists) {
+    this.setState({loading: true, currentVideoId: null})
     let params = queryString.stringify({playlists: playlists});
     axios.get(`http://myxx.herokuapp.com/mix?${params}`)
       .then(response => {
@@ -43,7 +55,7 @@ class App extends Component {
           let orderedVideos = response.data.orderedVideoIds;
           let firstVideo = videoMap[orderedVideos[0]].resourceId.videoId;
           let firstSelectedVideo = orderedVideos[0];
-          this.setState({selectedMixVideoMap: videoMap, selectedMixOrderedVideos: orderedVideos, selectedVideo: firstSelectedVideo, currentVideoId: firstVideo});
+          this.setState({loading: false, selectedMixVideoMap: videoMap, selectedMixOrderedVideos: orderedVideos, selectedVideo: firstSelectedVideo, currentVideoId: firstVideo});
         }
       }).catch(error => console.log(error));
   }
@@ -57,20 +69,36 @@ class App extends Component {
     this.setState({selectedVideo: nextVideo, currentVideoId: this.state.selectedMixVideoMap[nextVideo].resourceId.videoId});
   }
   render () {
-    let queue = this.state.selectedMixOrderedVideos.map(id => {
-      let video = this.state.selectedMixVideoMap[id];
-      return {
-        id: id,
-        title: video.title,
-        description: video.channelTitle,
-        thumbnail: video.thumbnails ? video.thumbnails.medium.url : null,
+    let queue = [];
+    if (!this.state.loading && this.currentMix !== this.state.selectedMixId && this.state.selectedMixOrderedVideos.length) {
+      queue = this.state.selectedMixOrderedVideos.map(id => {
+        let video = this.state.selectedMixVideoMap[id];
+        return {
+          id: id,
+          title: video.title,
+          description: video.channelTitle,
+          thumbnail: video.thumbnails ? video.thumbnails.medium.url : null,
+        }
+      });
+      this.currentMix = this.state.selectedMixId;
+    }
+    let playerPlaceholder = <h1>Select or Create a Mix</h1>;
+    if (this.state.loggedIn) {
+      if (this.state.loading) {
+        playerPlaceholder = <h1 className="loading-dots">Generating mix</h1>
       }
-    })
+    } else {
+      playerPlaceholder = <h1>Login or Signup to Get Started</h1>;
+    }
     return (
       <div className="App">
         <Navbar currentMixName={this.state.selectedMixName} />
         <Sidebar onSelect={this.handleMixSelect.bind(this)} />
-        <Player id={this.state.currentVideoId} onEnd={this.handleNextVideo.bind(this)} />
+        <Player
+          id={this.state.currentVideoId}
+          onEnd={this.handleNextVideo.bind(this)}
+          emptyMessage={playerPlaceholder}
+        />
         <Queue songs={queue} onSelect={this.handleVideoSelect.bind(this)} selectedId={this.state.selectedVideo} />
       </div>
     );

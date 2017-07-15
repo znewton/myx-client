@@ -1,3 +1,7 @@
+@import "./mixins";
+@import "./globals";
+@import "./mixin";
+
 .App {
   background-color: #333;
   position: fixed;
@@ -6,4 +10,16 @@
   left: 0;
   top: 0;
   overflow: none;
+  .loading-dots::after {
+    display: inline-block;
+    content: "  ";
+    width: 3em;
+    @include animation('loading 1s infinite');
+  }
+}
+
+@include keyframes(loading) {
+  0% {content: ".  "}
+  50% {content: ".. "}
+  100% {content: "..."}
 }
