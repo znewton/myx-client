@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import './Navbar.css';
 import firebase from 'firebase/app';
 import 'firebase/auth';
@@ -70,6 +70,9 @@ export default class Navbar extends Component {
             <Logo />
           </span>
         </div>
+        <div className="nav-middle">
+          <span className="mix-name">{this.props.currentMixName}</span>
+        </div>
         <div className="nav-right">
           {firebase.auth().currentUser ?
             <span>
@@ -99,7 +102,7 @@ export default class Navbar extends Component {
                 <Help />
               </Modal>
               <Modal
-                header={'Welcom to Myxx'}
+                header={'Welcome to Myxx'}
                 handleClose={(e) => this.closeMenu(e, 'aboutModal')}
                 open={this.state.aboutModalOpen}
                 bindTo="#settings_button"
@@ -128,6 +131,10 @@ export default class Navbar extends Component {
   }
 }
 
-Navbar.propTypes = {}
+Navbar.propTypes = {
+  currentMixName: PropTypes.string
+}
 
-Navbar.defaultProps = {}
+Navbar.defaultProps = {
+  currentMixName: ''
+}

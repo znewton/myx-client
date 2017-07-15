@@ -22,21 +22,28 @@ export default class Video extends Component {
 	  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 	  // Replace the 'ytplayer' element with an <iframe> and
 	  // YouTube player after the API code downloads.
+		this.setupPlayer(this.props.id)
+  }
+	componentWillReceiveProps(newProps) {
+		if (newProps.id !== this.props.id) {
+			this.player.loadVideoById(newProps.id);
+		}
+	}
+	setupPlayer(id) {
 		YouTubeIframeLoader.load((YT) => {
-			console.log()
 			this.YT = YT;
 			const parent = document.getElementById(this.props.parent);
 			let size = parent.offsetWidth;
 	    this.player = new YT.Player(`ytplayer-${this.props.parent}`, {
 	      height: size*9/16,
 	      width: size,
-	      videoId: this.props.id,
+	      videoId: id,
 				playerVars: {
 					color: 'white'
 				},
 				events: {
-					'onReady': this.onPlayerReady,
-					'onStateChange': this.onPlayerStateChange
+					'onReady': this.onPlayerReady.bind(this),
+					'onStateChange': this.onPlayerStateChange.bind(this)
 				}
 	    });
 			new ResizeSensor(parent, () => {
@@ -45,29 +52,11 @@ export default class Video extends Component {
 				this.player.getIframe().height = size*9/16;
 			});
 	  });
-  }
-	componentWillReceiveProps(newProps) {
-		const parent = document.getElementById(this.props.parent);
-		let size = parent.offsetWidth;
-		this.player = new this.YT.Player(`ytplayer-${this.props.parent}`, {
-			height: size*9/16,
-			width: size,
-			videoId: this.props.id,
-			playerVars: {
-				color: 'white'
-			},
-			events: {
-				'onReady': this.onPlayerReady,
-				'onStateChange': this.onPlayerStateChange
-			}
-		});
 	}
   render () {
     return (
       <div className="Video">
 				<div id={`ytplayer-${this.props.parent}`} />
-        {/* <iframe src={`http://www.youtube.com/embed/${this.props.id}`}
-            width={this.state.width} height={this.state.height} frameBorder="0" title="current song" ref="video" /> */}
       </div>
     );
   }
@@ -75,21 +64,22 @@ export default class Video extends Component {
 		event.target.playVideo();
 	}
 	onPlayerStateChange (event) {
+		let self = this;
 		switch(event.data) {
-			case this.YT.PlayerState.PLAYING:
-				this.props.onPlay(event);
+			case self.YT.PlayerState.PLAYING:
+				self.props.onPlay(event);
 				break;
-			case this.YT.PlayerState.ENDED:
-				this.props.onEnd(event);
+			case self.YT.PlayerState.ENDED:
+				self.props.onEnd(event);
 				break;
-			case this.YT.PlayerState.PAUSED:
-				this.props.onPause(event);
+			case self.YT.PlayerState.PAUSED:
+				self.props.onPause(event);
 				break;
-			case this.YT.PlayerState.BUFFERING:
-				this.props.onBuffer(event);
+			case self.YT.PlayerState.BUFFERING:
+				self.props.onBuffer(event);
 				break;
-			case this.YT.PlayerState.CUED:
-				this.props.onCued(event);
+			case self.YT.PlayerState.CUED:
+				self.props.onCued(event);
 				break;
 			default:
 				console.log('state change not handled');

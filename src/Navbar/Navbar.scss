@@ -19,6 +19,7 @@
   font-size: 1.1em;
   color: #aaa;
   .nav-left,
+  .nav-middle,
   .nav-right {
     flex: 1;
     height: inherit;
@@ -32,6 +33,9 @@
       margin-right: 0.3em;
     }
   }
+  .nav-middle {
+    text-align: center;
+  }
   .nav-right {
     text-align: right;
     button {
@@ -40,6 +44,11 @@
   }
   .brand {
     font-size: 1.66em;
+  }
+  .mix-name {
+    font-size: 1.33em;
+    font-weight: 300;
+    font-style: italic;
   }
   .nav-btn {
     font-weight: 600;
