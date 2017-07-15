@@ -83,6 +83,7 @@ export default class Video extends Component {
 				break;
 			case 100:
 				self.props.onEnd(event);
+				break;
 			default:
 				console.log('state change not handled');
 		}

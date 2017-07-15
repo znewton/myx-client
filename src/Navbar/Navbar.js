@@ -8,6 +8,7 @@ import Logo from '../components/Logo/Logo';
 import Auth from './auth/Auth';
 import Mixer from './mixing/Mixer';
 import Help from './help/Help';
+import About from './about/About';
 
 import Modal from '../components/Modal/Modal';
 import DropMenu from '../components/DropMenu/DropMenu';
@@ -102,12 +103,12 @@ export default class Navbar extends Component {
                 <Help />
               </Modal>
               <Modal
-                header={'Welcome to Myxx'}
+                header={<h2>Welcome to <Logo />!</h2>}
                 handleClose={(e) => this.closeMenu(e, 'aboutModal')}
                 open={this.state.aboutModalOpen}
                 bindTo="#settings_button"
               >
-                <h2>About</h2>
+                <About />
               </Modal>
             </span>
             :

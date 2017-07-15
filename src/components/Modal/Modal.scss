@@ -46,6 +46,9 @@
       font-size: 1.5em;
       line-height: 1.5em;
       border-bottom: 1px solid transparent;
+      & > * {
+        margin: 0;
+      }
     }
     .content > *:first-child {
 

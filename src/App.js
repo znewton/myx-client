@@ -62,7 +62,7 @@ class App extends Component {
       return {
         id: id,
         title: video.title,
-        description: video.description,
+        description: video.channelTitle,
         thumbnail: video.thumbnails ? video.thumbnails.medium.url : null,
       }
     })
