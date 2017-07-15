@@ -45,28 +45,29 @@ export default class Sidebar extends Component {
     })
   }
   handleSearchChange(event) {
-    this.setState({searchTerm: event.target.value});
+    this.setState({searchTerm: event.target.value.toLowerCase()});
   }
   render () {
     let mixes = this.state.mixes;
     if (this.state.searchTerm) {
       mixes = mixes
         .filter(mix =>
-          mix.name.includes(this.state.searchTerm) ||
-          mix.channels.filter(channel => channel.includes(this.state.searchTerm)).length);
+          mix.name.toLowerCase().includes(this.state.searchTerm) ||
+          mix.channels.filter(channel => channel.toLowerCase().includes(this.state.searchTerm)).length);
     }
     return (
       <div className="Sidebar">
         {this.state.mixes.length > 0 &&
           <div className="mix-search-wrapper">
-            <span className="material-icons searchIcon">search</span>
             <input
+              autoFocus="true"
               name="mixes-search"
               placeholder="Search mixes..."
               type="string"
               className="search"
               value={this.state.searchTerm}
               onChange={this.handleSearchChange.bind(this)} />
+            <span className="material-icons searchIcon">search</span>
           </div>
         }
         <div className="mixes-wrapper">

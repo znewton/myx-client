@@ -10,10 +10,12 @@
   }
 
   input {
+    font-size: inherit;
+    font-family: inherit;
     padding-left: 1.5em;
     border: none;
     border-bottom: 1px solid #ddd;
-    width: 80%;
+    width: 100%;
     line-height: 1.2em;
     font-size: 1em;
     vertical-align: bottom;
@@ -156,6 +158,15 @@
         }
       }
     }
+  }
+  .channel-empty-state {
+    color: #eee;
+    padding-top: 2em;
+    text-align: center;
+    font-size: 5em;
+    height: 4em;
+    font-weight: 700;
+    overflow: hidden;
   }
 }
 

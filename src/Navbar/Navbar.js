@@ -7,6 +7,7 @@ import 'firebase/auth';
 import Logo from '../components/Logo/Logo';
 import Auth from './auth/Auth';
 import Mixer from './mixing/Mixer';
+import Help from './help/Help';
 
 import Modal from '../components/Modal/Modal';
 import DropMenu from '../components/DropMenu/DropMenu';
@@ -20,6 +21,7 @@ export default class Navbar extends Component {
       authModalOpen: false,
       settingsMenuOpen: false,
       createMixModalOpen: false,
+      helpModalOpen: false,
       authType: 'login',
       loggedIn: false,
     }
@@ -27,7 +29,7 @@ export default class Navbar extends Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        this.setState({loggedIn: true})
+        this.setState({loggedIn: true});
       } else {
         this.setState({loggedIn: false});
       }
@@ -82,8 +84,17 @@ export default class Navbar extends Component {
               <button className="icon-btn" id="settings_button" onClick={(e) => this.toggleMenu(e,'settingsMenu')}><span className="material-icons">more_vert</span></button>
               <DropMenu open={this.state.settingsMenuOpen} from={Positioning.TOPRIGHT} bindTo="#settings_button">
                 {/* <button onClick={(e) => this.closeMenu(e, 'settingsMenu')}><span className="material-icons">settings</span><span>Settings</span></button> */}
+                <button onClick={(e) => this.toggleMenu(e, 'helpModal')}><span className="material-icons">help</span><span>Help</span></button>
                 <button onClick={this.handleSignOut.bind(this)}><span className="material-icons">lock_open</span><span>Sign Out</span></button>
               </DropMenu>
+              <Modal
+                header={'Using Myxx'}
+                handleClose={(e) => this.openMenu(e, 'helpModal')}
+                open={this.state.helpModalOpen}
+                bindTo="#settings_button"
+              >
+                <Help />
+              </Modal>
             </span>
             :
             <span id="authopener">
