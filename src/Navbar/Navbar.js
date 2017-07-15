@@ -21,6 +21,7 @@ export default class Navbar extends Component {
       authModalOpen: false,
       settingsMenuOpen: false,
       createMixModalOpen: false,
+      aboutModalOpen: false,
       helpModalOpen: false,
       authType: 'login',
       loggedIn: false,
@@ -84,16 +85,26 @@ export default class Navbar extends Component {
               <button className="icon-btn" id="settings_button" onClick={(e) => this.toggleMenu(e,'settingsMenu')}><span className="material-icons">more_vert</span></button>
               <DropMenu open={this.state.settingsMenuOpen} from={Positioning.TOPRIGHT} bindTo="#settings_button">
                 {/* <button onClick={(e) => this.closeMenu(e, 'settingsMenu')}><span className="material-icons">settings</span><span>Settings</span></button> */}
-                <button onClick={(e) => this.toggleMenu(e, 'helpModal')}><span className="material-icons">help</span><span>Help</span></button>
+                <button onClick={(e) => this.toggleMenu(e, 'aboutModal')}><span className="material-icons">info_outline</span><span>About</span></button>
+                <button onClick={(e) => this.toggleMenu(e, 'helpModal')}><span className="material-icons">help_outline</span><span>Help</span></button>
+                <span className="separator" />
                 <button onClick={this.handleSignOut.bind(this)}><span className="material-icons">lock_open</span><span>Sign Out</span></button>
               </DropMenu>
               <Modal
-                header={'Using Myxx'}
-                handleClose={(e) => this.openMenu(e, 'helpModal')}
+                header={'Help'}
+                handleClose={(e) => this.closeMenu(e, 'helpModal')}
                 open={this.state.helpModalOpen}
                 bindTo="#settings_button"
               >
                 <Help />
+              </Modal>
+              <Modal
+                header={'Welcom to Myxx'}
+                handleClose={(e) => this.closeMenu(e, 'aboutModal')}
+                open={this.state.aboutModalOpen}
+                bindTo="#settings_button"
+              >
+                <h2>About</h2>
               </Modal>
             </span>
             :

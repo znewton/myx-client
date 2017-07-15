@@ -14,7 +14,7 @@
   @include transition(transform 125ms ease);
   @include box-shadow(1px 1px 6px rgba(black, 0.4));
   vertical-align: middle;
-  & > * {
+  & > :not(.separator) {
     vertical-align: middle;
     & > span {
       vertical-align: middle;
@@ -44,5 +44,10 @@
   &.open {
     pointer-events: unset;
     transform: scale(1);
+  }
+  .separator {
+    background-color: #ddd;
+    display: block;
+    height: 1px;
   }
 }

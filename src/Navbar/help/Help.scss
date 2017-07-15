@@ -1,8 +1,16 @@
 .Help {
+  width: 40em;
+  padding: 1em;
+  padding-top: 0;
+  max-height: 90vh;
+  overflow-y: auto;
   h2 {
     color: #444;
   }
-  ol {
+  p:first-of-type {
+    margin-top: 0;
+  }
+  ol, ul, p {
     line-height: 1.75em;
   }
 }

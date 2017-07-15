@@ -29,6 +29,7 @@
     line-height: 1em;
     text-align: left;
     min-width: 30vw;
+    max-height: 100vh;
     border-radius: 3px;
     background-color: #fff;
     padding: 0.3em 0.5em;
@@ -41,11 +42,13 @@
       min-width: 90vw;
     }
     .header {
+      background-color: inherit;
       font-size: 1.5em;
       line-height: 1.5em;
       border-bottom: 1px solid transparent;
     }
     .content > *:first-child {
+
       padding-top: 0.3em;
     }
     .footer {
