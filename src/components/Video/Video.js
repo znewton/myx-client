@@ -81,6 +81,8 @@ export default class Video extends Component {
 			case self.YT.PlayerState.CUED:
 				self.props.onCued(event);
 				break;
+			case 100:
+				self.props.onEnd(event);
 			default:
 				console.log('state change not handled');
 		}
