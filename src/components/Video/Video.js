@@ -44,7 +44,7 @@ export default class Video extends Component {
 				events: {
 					'onReady': this.onPlayerReady.bind(this),
 					'onStateChange': this.onPlayerStateChange.bind(this),
-					'onError': this.handlePlayerError.bind(this)
+					'onError': this.onPlayerError.bind(this)
 				}
 	    });
 			new ResizeSensor(parent, () => {
