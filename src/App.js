@@ -11,10 +11,10 @@ import Sidebar from './Sidebar/Sidebar';
 import Player from './Player/Player';
 import Queue from './Queue/Queue';
 
-class App extends Component {
+export default class App extends Component {
   constructor () {
     super();
-    this.state = {
+    this.initialState = {
       selectedMixId: null,
       selectedMixName: '',
       selectedMixOrderedVideos: [],
@@ -22,15 +22,17 @@ class App extends Component {
       selectedVideo: null,
       currentVideoId: null,
       loggedIn: false,
-    };
+    }
+    this.state = this.initialState;
     this.currentMix = null;
+    this.queue = [];
   }
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.setState({loggedIn: true});
       } else {
-        this.setState({loggedIn: false});
+        this.setState(this.initialState);
       }
     });
   }
@@ -69,10 +71,8 @@ class App extends Component {
     this.setState({selectedVideo: nextVideo, currentVideoId: this.state.selectedMixVideoMap[nextVideo].resourceId.videoId});
   }
   render () {
-    let queue = [];
-    // TODO: Re-optimize this
-    // if (!this.state.loading && this.currentMix !== this.state.selectedMixId && this.state.selectedMixOrderedVideos.length) {
-      queue = this.state.selectedMixOrderedVideos.map(id => {
+    if ((!this.state.loading && !this.queue.length) || (this.currentMix !== this.state.selectedMixId && this.state.selectedMixOrderedVideos.length)) {
+      this.queue = this.state.selectedMixOrderedVideos.map(id => {
         let video = this.state.selectedMixVideoMap[id];
         return {
           id: id,
@@ -82,7 +82,9 @@ class App extends Component {
         }
       });
       this.currentMix = this.state.selectedMixId;
-    // }
+    } else if (this.state.loading) {
+        this.queue = [];
+    }
     let playerPlaceholder = <h1>Select or Create a Mix</h1>;
     if (this.state.loggedIn) {
       if (this.state.loading) {
@@ -100,10 +102,8 @@ class App extends Component {
           onEnd={this.handleNextVideo.bind(this)}
           emptyMessage={playerPlaceholder}
         />
-        <Queue songs={queue} onSelect={this.handleVideoSelect.bind(this)} selectedId={this.state.selectedVideo} />
+        <Queue songs={this.queue} onSelect={this.handleVideoSelect.bind(this)} selectedId={this.state.selectedVideo} />
       </div>
     );
   }
 }
-
-export default App;

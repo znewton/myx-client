@@ -60,7 +60,6 @@ export default class Sidebar extends Component {
         {this.state.mixes.length > 0 &&
           <div className="mix-search-wrapper">
             <input
-              autoFocus="true"
               name="mixes-search"
               placeholder="Search mixes..."
               type="string"

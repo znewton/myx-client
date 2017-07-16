@@ -121,12 +121,12 @@ export default class Mixer extends Component {
       <div className="Mixer">
         <div className="channel-search">
           <div>
-            <span className="material-icons searchIcon">search</span>
             <input
               placeholder="Search channels..."
               name="search"
               onChange={(e) => this.handleSearchInput(e.target.value)}
               value={this.state.searchTerm} />
+            <span className="material-icons searchIcon">search</span>
           </div>
           <div className="channels">
             {channelKeys.length ?

@@ -27,6 +27,9 @@
     &:focus {
       outline: none;
       border-color: $blue;
+      & + .searchIcon {
+        color: $blue;
+      }
     }
   }
   .searchIcon {
