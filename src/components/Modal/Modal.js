@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Modal.css';
-import { addEndEventListener } from '../../lib/Events/Events';
+import { addEndEventListener, removeEndEventListener } from '../../lib/Events/Events';
 import Positioning from '../../lib/Positioning/Positioning';
 
 export default class Modal extends Component {
@@ -10,6 +10,7 @@ export default class Modal extends Component {
     this.state = {
       origin: null,
     };
+    this.name = 'Modal_' + Math.random().toString(36).substring(7)
   }
   componentDidMount() {
     this.setState({
@@ -17,7 +18,10 @@ export default class Modal extends Component {
     });
     addEndEventListener(window, 'resize', () => this.setState({
       origin: Positioning.updateOriginFromCoordinates(document.querySelector(this.props.bindTo))
-    }), 100);
+    }), 100, this.name);
+  }
+  componentWillUnmount() {
+    removeEndEventListener(this.name);
   }
   render() {
     if(this.props.open) {

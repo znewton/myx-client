@@ -1,4 +1,5 @@
 let oneTimeEvents = {};
+let endEvents = {};
 
 function debounce(fn, delay) {
   var timer = null;
@@ -11,14 +12,25 @@ function debounce(fn, delay) {
   };
 }
 
-function addEndEventListener(element, event, _callback, timeout) {
+function addEndEventListener(element, event, _callback, timeout, name) {
   let endTimer;
-  element.addEventListener(event, function(evt) {
+  let handler = (evt) => {
     clearTimeout(endTimer);
     endTimer = setTimeout(function() {
-      _callback(evt);
+      handler(evt);
     }, timeout);
-  });
+  }
+  element.addEventListener(event, handler);
+  endEvents[name] = { element: element, event: event, handler: handler };
+}
+
+function removeEndEventListener(name) {
+  if (!endEvents[name]) return;
+  let element = endEvents[name].element;
+  let event = endEvents[name].event;
+  let handler = endEvents[name].handler;
+  element.removeEventListener(event, handler);
+  delete endEvents[name];
 }
 
 function addOneTimeEvent(element, event, _callback, name) {
@@ -41,6 +53,7 @@ function removeOneTimeEvent(name) {
 
 module.exports = {
   addEndEventListener,
+  removeEndEventListener,
   addOneTimeEvent,
   removeOneTimeEvent,
   debounce,

@@ -1,0 +1,24 @@
+@import "../../../sass/mixin";
+@import "../../../sass/mixins";
+@import "../../../sass/globals";
+
+.Playlist {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 0.3em 0;
+  .playlist-name {
+    @include flex(1 1 90%);
+  }
+  .playlist-action {
+    @include flex(1 1 10%);
+    &:hover {
+      text-shadow: 1px 1px 3px rgba(black, 0.2);
+      cursor: pointer;
+    }
+  }
+  &:last-of-type {
+    border-bottom: none;
+  }
+}

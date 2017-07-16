@@ -12,8 +12,14 @@
   overflow-x: hidden;
   overflow-y: auto;
   .mix-search-wrapper {
-    width: 94%;
-    margin: 0 3% 3% 3%;
+    z-index: 20;
+    background-color: #333;
+    position: fixed;
+    width: $sidebar_width;
+    padding: $sidebar_width*3/100;
+    padding-top: 0;
+    // width: 94%;
+    // margin: 0 3% 3% 3%;
     input {
       font-size: inherit;
       font-family: inherit;
@@ -50,6 +56,8 @@
     }
   }
   .mixes-wrapper {
+    padding-top: 3em;
+    height: 100%;
     overflow-y: auto;
   }
   div.li {
@@ -69,9 +77,17 @@
     .title {
       font-weight: 600;
       font-size: 1.2em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      height: 1.2em;
     }
     .description {
+      width: 100%;
+      overflow: hidden;
       text-overflow: ellipsis;
+      height: 3.4em;
       .span:not(:last-of-type)::after {
         content: ", ";
       }

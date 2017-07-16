@@ -1,0 +1,29 @@
+@import "../../../sass/mixin";
+@import "../../../sass/mixins";
+@import "../../../sass/globals";
+
+.Channel {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  height: 5em;
+  overflow: hidden;
+  .thumbnail {
+    @include flex(1);
+  }
+  .info {
+    @include flex(1 1 75%);
+    padding: 0.5em;
+    .channel-title {
+      font-weight: 600;
+    }
+  }
+  .channel-playlist-toggle {
+    @include flex(1 1 6%);
+    text-align: center;
+    &:hover {
+      text-shadow: 1px 1px 3px rgba(black, 0.2);
+      cursor: pointer;
+    }
+  }
+}

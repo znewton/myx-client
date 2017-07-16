@@ -8,6 +8,8 @@ import queryString from 'query-string';
 import './Mixer.css';
 
 import Events from '../../lib/Events/Events';
+import Channel from './Channel/Channel';
+import Playlist from './Playlist/Playlist';
 
 export default class Mixer extends Component {
   constructor() {
@@ -132,18 +134,12 @@ export default class Mixer extends Component {
                 let channel = this.state.channels[key];
                 return (
                   <div className="channel-result" key={key}>
-                    <div className="channel">
-                      <div className="thumbnail">
-                        <img src={channel.thumbnail} alt="thumbnail" />
-                      </div>
-                      <div className="info">
-                        <div className="channel-title">{channel.title}</div>
-                        <div className="channel-description">{channel.description}</div>
-                      </div>
-                      <div className="channel-playlist-toggle" onClick={() => this.getPlaylists(key)}>
-                        <span className="material-icons">keyboard_arrow_down</span>
-                      </div>
-                    </div>
+                    <Channel
+                      thumbnail={channel.thumbnail}
+                      title={channel.title}
+                      description={channel.description}
+                      onPlaylistToggle={() => this.getPlaylists(key)}
+                    />
                     {this.state.selectedChannel === key &&
                       <div className="channel-playlists">
                         {playlistKeys.length ?
@@ -151,12 +147,12 @@ export default class Mixer extends Component {
                             let playlist = this.state.selectedChannelPlaylists[key];
 
                             return (
-                              <div className="playlist-result" key={key}>
-                                <div className="playlist-name">{playlist.name}</div>
-                                <div className="playlist-action" onClick={() => this.addPlaylist(key)}>
-                                  <span className="material-icons">add</span>
-                                </div>
-                              </div>
+                              <Playlist
+                                key={key}
+                                name={playlist.name}
+                                action={() => this.addPlaylist(key)}
+                                actionIcon="add"
+                              />
                             );
                           })
                           : <div className="playlists-loading-state"></div>
@@ -175,12 +171,12 @@ export default class Mixer extends Component {
             {mixKeys.map(key => {
               let playlist = this.state.currentMix[key];
               return (
-                <div className="playlist-result" key={`mix${key}`}>
-                  <div className="playlist-name"><strong>{playlist.name}</strong> ({playlist.channel})</div>
-                  <div className="playlist-action" onClick={() => this.removePlaylist(key)}>
-                    <span className="material-icons">remove</span>
-                  </div>
-                </div>
+                <Playlist
+                  key={`mix${key}`}
+                  name={<span><strong>{playlist.name}</strong> ({playlist.channel})</span>}
+                  action={() => this.removePlaylist(key)}
+                  actionIcon="remove"
+                />
               );
             })
             }
