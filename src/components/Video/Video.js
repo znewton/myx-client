@@ -43,7 +43,8 @@ export default class Video extends Component {
 				},
 				events: {
 					'onReady': this.onPlayerReady.bind(this),
-					'onStateChange': this.onPlayerStateChange.bind(this)
+					'onStateChange': this.onPlayerStateChange.bind(this),
+					'onError': this.handlePlayerError.bind(this)
 				}
 	    });
 			new ResizeSensor(parent, () => {
@@ -81,11 +82,19 @@ export default class Video extends Component {
 			case self.YT.PlayerState.CUED:
 				self.props.onCued(event);
 				break;
+			default:
+		}
+	}
+	onPlayerError(event) {
+		let self = this;
+		switch (event.data) {
+			case 2:
 			case 100:
+			case 101:
+			case 150:
 				self.props.onEnd(event);
 				break;
 			default:
-				console.log('state change not handled');
 		}
 	}
 }
