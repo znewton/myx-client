@@ -33,10 +33,10 @@ export default class Video extends Component {
 		YouTubeIframeLoader.load((YT) => {
 			this.YT = YT;
 			const parent = document.getElementById(this.props.parent);
-			let size = parent.offsetWidth;
+			let dimensions = this.getRatioDimensions(parent.offsetWidth, parent.offsetHeight);
 	    this.player = new YT.Player(`ytplayer-${this.props.parent}`, {
-	      height: size*9/16,
-	      width: size,
+	      height: dimensions.height,
+	      width: dimensions.width,
 	      videoId: id,
 				playerVars: {
 					color: 'white'
@@ -48,9 +48,9 @@ export default class Video extends Component {
 				}
 	    });
 			new ResizeSensor(parent, () => {
-				size = parent.offsetWidth;
-				this.player.getIframe().width = size;
-				this.player.getIframe().height = size*9/16;
+				let dimensions = this.getRatioDimensions(parent.offsetWidth, parent.offsetHeight);
+				this.player.getIframe().width = dimensions.width;
+				this.player.getIframe().height = dimensions.height;
 			});
 	  });
 	}
@@ -95,6 +95,19 @@ export default class Video extends Component {
 				self.props.onEnd(event);
 				break;
 			default:
+		}
+	}
+	getRatioDimensions(width, height) {
+		var ratio = 9/16;
+		if (width * ratio > height) {
+			return {
+				width: height/ratio,
+				height: height
+			}
+		}
+		return {
+			width:  width,
+			height: width*ratio
 		}
 	}
 }
