@@ -67,8 +67,8 @@ export default class Navbar extends Component {
     return (
       <nav className="Navbar">
         <div className="nav-left">
-          <span className="brand">
-            <Logo />
+          <span className="brand" title="My Mix (Beta)">
+            <Logo /><sup>Beta</sup>
           </span>
         </div>
         <div className="nav-middle">
