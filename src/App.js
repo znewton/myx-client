@@ -58,17 +58,19 @@ export default class App extends Component {
           let firstVideo = videoMap[orderedVideos[0]].resourceId.videoId;
           let firstSelectedVideo = orderedVideos[0];
           this.setState({loading: false, selectedMixVideoMap: videoMap, selectedMixOrderedVideos: orderedVideos, selectedVideo: firstSelectedVideo, currentVideoId: firstVideo});
+          document.title = videoMap[orderedVideos[0]].title;
         }
       }).catch(error => console.log(error));
   }
   handleVideoSelect (videoId) {
     this.setState({selectedVideo: videoId, currentVideoId: this.state.selectedMixVideoMap[videoId].resourceId.videoId});
+    document.title = this.state.selectedMixVideoMap[videoId].title;
   }
   handleNextVideo () {
     let orderedVideos = this.state.selectedMixOrderedVideos;
     let currentVideo = this.state.selectedVideo;
     let nextVideo = orderedVideos[orderedVideos.indexOf(currentVideo) + 1];
-    this.setState({selectedVideo: nextVideo, currentVideoId: this.state.selectedMixVideoMap[nextVideo].resourceId.videoId});
+    this.handleVideoSelect(nextVideo);
   }
   render () {
     if ((!this.state.loading && !this.queue.length) || (this.currentMix !== this.state.selectedMixId && this.state.selectedMixOrderedVideos.length)) {
