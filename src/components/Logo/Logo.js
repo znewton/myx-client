@@ -3,7 +3,10 @@ import './Logo.css';
 
 const Logo = (props) => (
   <span className="Logo">
-    <span className="my">my</span><span className="xx">xx</span>
+    <span className="grey">m</span>
+    {/* <span className="material-icons blue">music_note</span> */}
+    <span className="blue">y</span>
+    <span className="grey">x</span>
   </span>
 );
 

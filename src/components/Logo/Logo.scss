@@ -2,10 +2,16 @@
 .Logo {
   font-size: inherit;
   font-weight: 800;
-  .my {
+  vertical-align: top;
+  .blue {
     color: $blue;
   }
-  .xx {
+  .grey {
     color: #aaa;
+  }
+  .material-icons {
+    font-size: 1.5em;
+    margin: 0 -0.2em 0 -0.2em;
+    vertical-align: middle;
   }
 }
