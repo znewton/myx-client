@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Queue.css';
 
+import QueuedVideo from './QueuedVideo/QueuedVideo.js';
+
 export default class Queue extends Component {
   componentWillReceiveProps(newProps) {
-    let selectedSong = newProps.selectedId;
-    let queueElement = document.getElementById(`queued-${selectedSong}`);
+    let selectedVideo = newProps.selectedId;
+    let queueElement = document.getElementById(`queued-${selectedVideo}`);
     if (queueElement) {
       let queueRef = this.refs.Queue;
       queueRef.scrollLeft = queueElement.offsetLeft-10;
@@ -15,27 +17,16 @@ export default class Queue extends Component {
     return (
       <div className="Queue" ref="Queue">
         <div className="wrapper">
-          {this.props.songs.map(song => (
-            <div
-              className={'li' + (song.id === this.props.selectedId ? ' selected' : '')}
-              key={song.id}
-              id={`queued-${song.id}`}
-              onClick={() => this.props.onSelect(song.id)}
-            >
-              <div className="thumbnail">
-                {song.thumbnail ?
-                <img src={song.thumbnail} alt="video thumbnail" /> :
-                <span /> }
-                <span className="material-icons play-button">play_arrow</span>
-              </div>
-              <div className="info">
-                <div className="title">{song.title}</div>
-                <div className="duration"></div>
-                <div className="description">
-                  {song.description}
-                </div>
-              </div>
-            </div>
+          {this.props.videos.map(video => (
+            <QueuedVideo
+              key={video.id}
+              id={video.id}
+              isSelected={video.id === this.props.selectedId}
+              onClick={() => this.props.onSelect(video.id)}
+              thumbnail={video.thumbnail}
+              title={video.title}
+              description={video.description}
+            />
           ))}
         </div>
       </div>
@@ -45,11 +36,11 @@ export default class Queue extends Component {
 
 Queue.propTypes = {
   selectedId: PropTypes.string,
-  songs: PropTypes.array,
+  videos: PropTypes.array,
   onSelect: PropTypes.func
 }
 
 Queue.defaultProps = {
-  songs: [],
+  videos: [],
   onSelect: () => {}
 }

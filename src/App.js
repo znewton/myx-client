@@ -104,7 +104,7 @@ export default class App extends Component {
           onEnd={this.handleNextVideo.bind(this)}
           emptyMessage={playerPlaceholder}
         />
-        <Queue songs={this.queue} onSelect={this.handleVideoSelect.bind(this)} selectedId={this.state.selectedVideo} />
+        <Queue videos={this.queue} onSelect={this.handleVideoSelect.bind(this)} selectedId={this.state.selectedVideo} />
       </div>
     );
   }

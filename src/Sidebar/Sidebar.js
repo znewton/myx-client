@@ -5,6 +5,8 @@ import 'firebase/auth';
 import 'firebase/database';
 import './Sidebar.css';
 
+import Mix from './Mix/Mix.js';
+
 export default class Sidebar extends Component {
   constructor () {
     super();
@@ -71,12 +73,12 @@ export default class Sidebar extends Component {
         }
         <div className="mixes-wrapper">
           {mixes.map(mix => (
-            <div className="li" key={mix.id} onClick={() => this.props.onSelect(mix.id)}>
-              <div className="title">{mix.name}</div>
-              <div className="description">
-                {mix.channels && mix.channels.map((channel,i) => <span key={i}>{channel}{i < mix.channels.length-1 && ', '}</span>)}
-              </div>
-            </div>
+            <Mix
+              key={mix.id}
+              onClick={() => this.props.onSelect(mix.id)}
+              name={mix.name}
+              channels={mix.channels}
+            />
           ))}
         </div>
       </div>
