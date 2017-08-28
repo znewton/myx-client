@@ -77,7 +77,10 @@ export default class Navbar extends Component {
         <div className="nav-right">
           {firebase.auth().currentUser ?
             <span>
-              <button className="nav-btn blue" id="create_mix_button" onClick={(e) => this.toggleMenu(e, 'createMixModal')}><span className="material-icons">add</span><span>create mix</span></button>
+              <button className="nav-btn blue" id="create_mix_button" onClick={(e) => this.toggleMenu(e, 'createMixModal')}>
+                <span className="material-icons">add</span>
+                <span>Create Mix</span>
+              </button>
               <Modal
                 header={'Create Mix'}
                 handleClose={(e) => this.closeMenu(e, 'createMixModal')}

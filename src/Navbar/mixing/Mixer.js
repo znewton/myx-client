@@ -120,7 +120,7 @@ export default class Mixer extends Component {
     return (
       <div className="Mixer">
         <div className="channel-search">
-          <div>
+          <div className="search-bar">
             <input
               placeholder="Search channels..."
               name="search"
@@ -185,6 +185,7 @@ export default class Mixer extends Component {
         {mixKeys.length > 1 &&
           <div className="mix-footer">
             <div className="footer-left">
+              <div><label>Mix Name</label></div>
               <input
                 name="mix-name"
                 onChange={(e) => this.setState({mixName: e.target.value})}
