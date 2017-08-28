@@ -98,7 +98,7 @@ export default class App extends Component {
     return (
       <div className="App">
         <Navbar currentMixName={this.state.selectedMixName} />
-        <Sidebar onSelect={this.handleMixSelect.bind(this)} />
+        <Sidebar onSelect={this.handleMixSelect.bind(this)} activeMix={this.state.selectedMixId} />
         <Player
           id={this.state.currentVideoId}
           onEnd={this.handleNextVideo.bind(this)}

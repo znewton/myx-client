@@ -78,6 +78,7 @@ export default class Sidebar extends Component {
               onClick={() => this.props.onSelect(mix.id)}
               name={mix.name}
               channels={mix.channels}
+              selected={mix.id === this.props.activeMix}
             />
           ))}
         </div>
@@ -87,6 +88,7 @@ export default class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
+  activeMix: PropTypes.string,
   onSelect: PropTypes.func
 }
 
