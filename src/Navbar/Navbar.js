@@ -28,6 +28,9 @@ export default class Navbar extends Component {
       loggedIn: false,
     }
   }
+  /**
+   * React Life-cycle Functions
+   */
   componentDidMount() {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
@@ -36,26 +39,6 @@ export default class Navbar extends Component {
         this.setState({loggedIn: false});
       }
     })
-  }
-  handleAuthClick(e, type) {
-    e.stopPropagation();
-    this.setState({authModalOpen: true, authType: type});
-    Events.addOneTimeEvent(window, 'click', () => this.setState({authModalOpen: false}), 'authModalOpenToggle');
-  }
-  handleSignOut() {
-    firebase.auth().signOut();
-  }
-  toggleMenu(e, name) {
-    if (e) e.stopPropagation();
-    let open = !this.state[`${name}Open`];
-    this.setState({[`${name}Open`]: open});
-    if (!name.toLowerCase().includes('modal'))
-      Events.addOneTimeEvent(window, 'click', () => this.setState({[`${name}Open`]: false}), `${name}OpenToggle`);
-  }
-  closeMenu(e, name) {
-    if (e) e.stopPropagation();
-    this.setState({[`${name}Open`]: false});
-    Events.removeOneTimeEvent(`${name}OpenToggle`);
   }
   componentWillUnmount() {
     const events = ['authModal', 'settingsMenu', 'createMix'];
@@ -81,14 +64,7 @@ export default class Navbar extends Component {
                 <span className="material-icons">add</span>
                 <span>Create Mix</span>
               </button>
-              <Modal
-                header={'Create Mix'}
-                handleClose={(e) => this.closeMenu(e, 'createMixModal')}
-                open={this.state.createMixModalOpen}
-                bindTo="#create_mix_button"
-              >
-                <Mixer close={e => this.closeMenu(e, 'createMixModal')} />
-              </Modal>
+              {this.createMixModal()}
               <button className="icon-btn" id="settings_button" onClick={(e) => this.toggleMenu(e,'settingsMenu')}><span className="material-icons">more_vert</span></button>
               <DropMenu open={this.state.settingsMenuOpen} from={Positioning.TOPRIGHT} bindTo="#settings_button">
                 {/* <button onClick={(e) => this.closeMenu(e, 'settingsMenu')}><span className="material-icons">settings</span><span>Settings</span></button> */}
@@ -97,42 +73,107 @@ export default class Navbar extends Component {
                 <span className="separator" />
                 <button onClick={this.handleSignOut.bind(this)}><span className="material-icons">lock_open</span><span>Sign Out</span></button>
               </DropMenu>
-              <Modal
-                header={'Help'}
-                handleClose={(e) => this.closeMenu(e, 'helpModal')}
-                open={this.state.helpModalOpen}
-                bindTo="#settings_button"
-              >
-                <Help />
-              </Modal>
-              <Modal
-                header={<h2>Welcome to <Logo />!</h2>}
-                handleClose={(e) => this.closeMenu(e, 'aboutModal')}
-                open={this.state.aboutModalOpen}
-                bindTo="#settings_button"
-              >
-                <About />
-              </Modal>
+              {this.aboutModal()}
+              {this.helpModal()}
             </span>
             :
             <span id="authopener">
               <button className="nav-btn" onClick={(e) => this.handleAuthClick(e, 'login')}>Log in</button>
               &nbsp;or&nbsp;
               <button className="nav-btn blue" onClick={(e) => this.handleAuthClick(e, 'signup')}>Sign up</button>
-              <Modal
-                header={this.state.authType.charAt(0).toUpperCase() + this.state.authType.slice(1)}
-                handleClose={(e) => this.closeMenu(e, 'authModal')}
-                open={this.state.authModalOpen}
-                bindTo="#authopener"
-              >
-                <Auth type={this.state.authType} close={(e) => this.closeMenu(e, 'authModal')} />
-              </Modal>
+              {this.authModal()}
             </span>
           }
         </div>
       </nav>
     );
   }
+  
+  /**
+   * Event Handlers
+   */
+  
+  /**
+   * Open the login/signup modal.
+   * 
+   * @param {*} e 
+   * @param {string} type 
+   */
+  handleAuthClick(e, type) {
+    e.stopPropagation();
+    this.setState({authModalOpen: true, authType: type});
+    Events.addOneTimeEvent(window, 'click', () => this.setState({authModalOpen: false}), 'authModalOpenToggle');
+  }
+  /**
+   * Sign out the user through Firebase.
+   */
+  handleSignOut() {
+    firebase.auth().signOut();
+  }
+  /**
+   * Open/close a menu. Does not add window click event for modals.
+   * 
+   * @param {*} e 
+   * @param {*} name 
+   */
+  toggleMenu(e, name) {
+    if (e) e.stopPropagation();
+    let open = !this.state[`${name}Open`];
+    this.setState({[`${name}Open`]: open});
+    if (!name.toLowerCase().includes('modal') && open)
+      Events.addOneTimeEvent(window, 'click', () => this.setState({[`${name}Open`]: false}), `${name}OpenToggle`);
+  }
+  /**
+   * Close a menu.
+   * 
+   * @param {*} e 
+   * @param {*} name 
+   */
+  closeMenu(e, name) {
+    if (e) e.stopPropagation();
+    this.setState({[`${name}Open`]: false});
+    Events.removeOneTimeEvent(`${name}OpenToggle`);
+  }
+
+  /**
+   * Modals
+   */
+  authModal = () => this.modal(
+    <Auth type={this.state.authType} close={(e) => this.closeMenu(e, 'authModal')} />,
+    this.state.authType.charAt(0).toUpperCase() + this.state.authType.slice(1),
+    'authModal', '#authOpener'
+  );
+
+  createMixModal = () => this.modal(
+    <Mixer close={(e) => this.closeMenu(e, 'createMixModal')} />, 
+    'Create Mix', 'createMixModal', '#create_mix_button'
+  );
+
+  aboutModal = () => this.modal(
+    <About />, <h2>Welcome to <Logo />!</h2>, 'aboutModal', '#settings_button'
+  );
+
+  helpModal = () => this.modal(
+    <Help />, 'Help', 'helpModal', '#settings_button'
+  );
+
+  /**
+   * Create a modal whose open state is handled by [this.state]
+   * 
+   * @param {*} contents
+   * @param {*} header
+   * @param {string} name
+   * @param {string} openFromId
+   */
+  modal = (contents, header, name, openFromId) => 
+    <Modal
+      header={header}
+      handleClose={(e) => this.closeMenu(e, name)}
+      open={this.state[`${name}Open`]}
+      bindTo={openFromId}
+    >
+      {contents}
+    </Modal>
 }
 
 Navbar.propTypes = {
