@@ -158,7 +158,7 @@ export default class Navbar extends Component {
   );
 
   /**
-   * Create a modal whose open state is handled by [this.state]
+   * Create a modal whose open state is handled by this state
    * 
    * @param {*} contents
    * @param {*} header

@@ -5,6 +5,10 @@ import './Queue.css';
 import QueuedVideo from './QueuedVideo/QueuedVideo.js';
 
 export default class Queue extends Component {
+  /**
+   * Life-cycle functions
+   */
+  
   componentWillReceiveProps(newProps) {
     let selectedVideo = newProps.selectedId;
     let queueElement = document.getElementById(`queued-${selectedVideo}`);

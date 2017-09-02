@@ -15,6 +15,10 @@ export default class Sidebar extends Component {
       searchTerm: ''
     }
   }
+  /**
+   * Life-cycle functions
+   */
+  
   componentDidMount() {
     if (firebase.auth().currentUser) {
       this.setUpList();
@@ -27,6 +31,34 @@ export default class Sidebar extends Component {
       }
     });
   }
+  render () {
+    return (
+      <div className="Sidebar">
+        {this.state.mixes.length > 0 &&
+          <div className="mix-search-wrapper">
+            <input
+              name="mixes-search"
+              placeholder="Search mixes..."
+              type="string"
+              className="search"
+              value={this.state.searchTerm}
+              onChange={this.handleSearchChange.bind(this)} />
+            <span className="material-icons searchIcon">search</span>
+          </div>
+        }
+        <div className="mixes-wrapper">
+          {this.mixes()}
+        </div>
+      </div>
+    );
+  }
+  /**
+   * Miscellaneous Functions
+   */
+
+  /**
+   * Build the list of user mixes.
+   */
   setUpList() {
     let mixesRef = firebase.database().ref(`/mixes/${firebase.auth().currentUser.uid}`);
     mixesRef.on('child_added', data => {
@@ -46,45 +78,35 @@ export default class Sidebar extends Component {
       this.setState({mixes});
     })
   }
+  /**
+   * Update the search term on input.
+   * 
+   * @param {Object} event 
+   */
   handleSearchChange(event) {
     this.setState({searchTerm: event.target.value.toLowerCase()});
   }
-  render () {
-    let mixes = this.state.mixes;
-    if (this.state.searchTerm) {
-      mixes = mixes
-        .filter(mix =>
-          mix.name.toLowerCase().includes(this.state.searchTerm) ||
-          mix.channels.filter(channel => channel.toLowerCase().includes(this.state.searchTerm)).length);
-    }
-    return (
-      <div className="Sidebar">
-        {this.state.mixes.length > 0 &&
-          <div className="mix-search-wrapper">
-            <input
-              name="mixes-search"
-              placeholder="Search mixes..."
-              type="string"
-              className="search"
-              value={this.state.searchTerm}
-              onChange={this.handleSearchChange.bind(this)} />
-            <span className="material-icons searchIcon">search</span>
-          </div>
-        }
-        <div className="mixes-wrapper">
-          {mixes.map(mix => (
-            <Mix
-              key={mix.id}
-              onClick={() => this.props.onSelect(mix.id)}
-              name={mix.name}
-              channels={mix.channels}
-              selected={mix.id === this.props.activeMix}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }
+  /**
+   * Build the mix react elements, filtering by serach term.
+   * 
+   * @return {Object[]}
+   */
+  mixes() {
+    let mixes = this.state.searchTerm ? 
+      this.state.mixes : this.state.mixes
+      .filter(mix =>
+        mix.name.toLowerCase().includes(this.state.searchTerm) ||
+        mix.channels.filter(channel => channel.toLowerCase().includes(this.state.searchTerm)).length);
+    return mixes.map(mix => (
+      <Mix
+        key={mix.id}
+        onClick={() => this.props.onSelect(mix.id)}
+        name={mix.name}
+        channels={mix.channels}
+        selected={mix.id === this.props.activeMix}
+      />
+    ));
+  } 
 }
 
 Sidebar.propTypes = {
