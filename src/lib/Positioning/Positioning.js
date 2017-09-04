@@ -8,11 +8,16 @@ const BOTTOMLEFT = 5;
 const BOTTOM = 6;
 const BOTTOMRIGHT = 7;
 
+/**
+ * Retrieve the css transform-origin attribute value.
+ * 
+ * @param {number} from 
+ */
 function updateOrigin(from) {
   let origin = null;
   switch (from) {
     case TOPLEFT:
-      origin = 'top-left';
+      origin = 'top left';
       break;
     case TOP:
       origin = 'top center';
@@ -41,6 +46,16 @@ function updateOrigin(from) {
   return origin;
 }
 
+/**
+ * Retrieve an exact position based on an element and area of that element.
+ * {
+ *  top, bottom, left, right, origin
+ * }
+ * 
+ * @param {Object} element 
+ * @param {number} from 
+ * @return {Object}
+ */
 function updatePosition(element, from) {
   if(!element) return {};
   let newPosition = {};
@@ -76,6 +91,13 @@ function updatePosition(element, from) {
   return newPosition;
 }
 
+/**
+ * Set an element's origins from a specific x and y coordinate.
+ * 
+ * @param {Object} element 
+ * @param {number} x 
+ * @param {number} y 
+ */
 function updateOriginFromCoordinates(element, x, y) {
   if(element) {
     const box = element.getBoundingClientRect();

@@ -1,6 +1,12 @@
 let oneTimeEvents = {};
 let endEvents = {};
 
+/**
+ * Only perform callback, fn, after a delay.
+ * 
+ * @param {*} fn 
+ * @param {number} delay 
+ */
 function debounce(fn, delay) {
   var timer = null;
   return function () {
@@ -12,6 +18,15 @@ function debounce(fn, delay) {
   };
 }
 
+/**
+ * Add an event listener that only fires at the end of an event.
+ * 
+ * @param {Object} element 
+ * @param {string} event 
+ * @param {*} _callback 
+ * @param {number} timeout 
+ * @param {string} name 
+ */
 function addEndEventListener(element, event, _callback, timeout, name) {
   let endTimer;
   let handler = (evt) => {
@@ -24,6 +39,11 @@ function addEndEventListener(element, event, _callback, timeout, name) {
   endEvents[name] = { element: element, event: event, handler: handler };
 }
 
+/**
+ * Remove an event listener added by `addEndEventListener`.
+ * 
+ * @param {string} name 
+ */
 function removeEndEventListener(name) {
   if (!endEvents[name]) return;
   let element = endEvents[name].element;
@@ -33,6 +53,14 @@ function removeEndEventListener(name) {
   delete endEvents[name];
 }
 
+/**
+ * Add an event listener that can be fired once then is removed.
+ * 
+ * @param {Object} element 
+ * @param {string} event 
+ * @param {*} _callback 
+ * @param {string} name 
+ */
 function addOneTimeEvent(element, event, _callback, name) {
   let handler = () => {
       _callback();
@@ -42,6 +70,11 @@ function addOneTimeEvent(element, event, _callback, name) {
   oneTimeEvents[name] = { element: element, event: event, handler: handler };
 }
 
+/**
+ * Manually remove an event added by `addOneTimeEvent`.
+ * 
+ * @param {string} name 
+ */
 function removeOneTimeEvent(name) {
   if (!oneTimeEvents[name]) return;
   let element = oneTimeEvents[name].element;
