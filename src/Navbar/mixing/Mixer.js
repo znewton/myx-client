@@ -7,6 +7,7 @@ import 'firebase/database';
 import queryString from 'query-string';
 import './Mixer.css';
 
+import FbHelpers from '../../lib/Firebase/Firebase.js';
 import Events from '../../lib/Events/Events';
 import Channel from './Channel/Channel';
 import Playlist from './Playlist/Playlist';
@@ -24,6 +25,135 @@ export default class Mixer extends Component {
       mixName: 'Mix_' + Math.random().toString(36).substring(7)
     };
     this.search = Events.debounce(this.search, 250);
+  }
+  /**
+   * Life-cycle functions
+   */
+
+  render () {
+    const channelKeys = Object.keys(this.state.channels);
+    const playlistKeys = Object.keys(this.state.selectedChannelPlaylists);
+    const mixKeys = Object.keys(this.state.currentMix);
+    return (
+      <div className="Mixer">
+        <div className="channel-search">
+          <div className="search-bar">
+            <input
+              placeholder="Search channels..."
+              name="search"
+              onChange={(e) => this.handleSearchInput(e.target.value)}
+              value={this.state.searchTerm} />
+            <span className="material-icons searchIcon">search</span>
+          </div>
+          <div className="channels">
+            {channelKeys.length ?
+              this.channelSearchResults(channelKeys, playlistKeys)
+              : this.emptySearchState()}
+          </div>
+        </div>
+        {mixKeys.length > 0 &&
+          <div className="current-mix">
+            {this.currentMix(mixKeys)}
+          </div>
+        }
+        {mixKeys.length > 1 &&
+          <div className="mix-footer">
+            <div className="footer-left">
+              <div><label>Mix Name</label></div>
+              <input
+                name="mix-name"
+                onChange={(e) => this.setState({mixName: e.target.value})}
+                value={this.state.mixName}
+              />
+            </div>
+            <div className="footer-right">
+              <button className="btn blue" onClick={() => this.createMix()}>Create</button>
+            </div>
+          </div>
+        }
+      </div>
+    );
+  }
+  /**
+   * Render helpers
+   */
+
+  emptySearchState = () => this.state.searching ?
+    <div className="channel-empty-state loading-dots">Searching</div>
+    : <div className="channel-empty-state">No Results</div>;
+
+  /**
+   * Retrieve list of playlists in current mix.
+   * 
+   * @param {string[]} mixKeys
+   */
+  currentMix = (mixKeys) => mixKeys.map(key => {
+    let playlist = this.state.currentMix[key];
+    return (
+      <Playlist
+        key={`mix${key}`}
+        name={<span><strong>{playlist.name}</strong> ({playlist.channel})</span>}
+        action={() => this.removePlaylist(key)}
+        actionIcon="remove"
+      />
+    );
+  });
+
+  /**
+   * Retrieve list of channels returned from search.
+   * 
+   * @param {string[]} channelKeys
+   * @param {string[]} playlistKeys
+   */
+  channelSearchResults = (channelKeys, playlistKeys) => 
+    channelKeys.map(key => {
+      let channel = this.state.channels[key];
+      return (
+        <div className="channel-result" key={key}>
+          <Channel
+            thumbnail={channel.thumbnail}
+            title={channel.title}
+            description={channel.description}
+            onPlaylistToggle={() => this.getPlaylists(key)}
+          />
+          {this.state.selectedChannel === key &&
+            <div className="channel-playlists">
+              {playlistKeys.length ?
+                this.channelPlaylists(playlistKeys)
+                : <div className="playlists-loading-state"></div>
+              }
+            </div>
+          }
+        </div>
+    )});
+
+  /**
+   * Retrieve list of playlists in selected channel.
+   * 
+   * @param {string[]}
+   */
+  channelPlaylists = (playlistKeys) => 
+    playlistKeys.filter(key => !this.state.currentMix[key]).map(key => (
+      <Playlist
+        name={this.state.selectedChannelPlaylists[key].name}
+        action={() => this.addPlaylist(key)}
+        actionIcon="add"
+      />
+    ));
+
+  /**
+   * Miscellaneous Functions
+   */
+
+  resetState() {
+    this.setState({
+      searchTerm: '',
+      channels: {},
+      selectedChannel: null,
+      selectedChannelPlaylists: {},
+      currentMix: {},
+      mixName: 'Mix_' + Math.random().toString(36).substring(7)
+    });
   }
   handleSearchInput(value) {
     this.setState({searchTerm: value});
@@ -88,117 +218,15 @@ export default class Mixer extends Component {
     this.setState({currentMix: mix});
   }
   createMix() {
-    let newMixRef = firebase.database().ref(`/mixes/${firebase.auth().currentUser.uid}`).push();
     let mixPlayListKeys = Object.keys(this.state.currentMix);
     let channels = [];
     for (let key in this.state.currentMix) {
       let channelName = this.state.currentMix[key].channel;
       if (!channels.includes(channelName)) channels.push(channelName);
     }
-    newMixRef.set({
-      name: this.state.mixName,
-      playlists: mixPlayListKeys,
-      channels: channels
-    });
+    FbHelpers.createMix(this.state.mixName, mixPlayListKeys, channels);
     this.resetState();
     this.props.close();
-  }
-  resetState() {
-    this.setState({
-      searchTerm: '',
-      channels: {},
-      selectedChannel: null,
-      selectedChannelPlaylists: {},
-      currentMix: {},
-      mixName: 'Mix_' + Math.random().toString(36).substring(7)
-    });
-  }
-  render () {
-    const channelKeys = Object.keys(this.state.channels);
-    const playlistKeys = Object.keys(this.state.selectedChannelPlaylists);
-    const mixKeys = Object.keys(this.state.currentMix);
-    return (
-      <div className="Mixer">
-        <div className="channel-search">
-          <div className="search-bar">
-            <input
-              placeholder="Search channels..."
-              name="search"
-              onChange={(e) => this.handleSearchInput(e.target.value)}
-              value={this.state.searchTerm} />
-            <span className="material-icons searchIcon">search</span>
-          </div>
-          <div className="channels">
-            {channelKeys.length ?
-              channelKeys.map(key => {
-                let channel = this.state.channels[key];
-                return (
-                  <div className="channel-result" key={key}>
-                    <Channel
-                      thumbnail={channel.thumbnail}
-                      title={channel.title}
-                      description={channel.description}
-                      onPlaylistToggle={() => this.getPlaylists(key)}
-                    />
-                    {this.state.selectedChannel === key &&
-                      <div className="channel-playlists">
-                        {playlistKeys.length ?
-                          playlistKeys.filter(key => !this.state.currentMix[key]).map(key => {
-                            let playlist = this.state.selectedChannelPlaylists[key];
-
-                            return (
-                              <Playlist
-                                key={key}
-                                name={playlist.name}
-                                action={() => this.addPlaylist(key)}
-                                actionIcon="add"
-                              />
-                            );
-                          })
-                          : <div className="playlists-loading-state"></div>
-                        }
-                      </div>
-                    }
-                  </div>
-              )})
-              : (this.state.searching ?
-                <div className="channel-empty-state loading-dots">Searching</div>
-                : <div className="channel-empty-state">No Results</div>)}
-          </div>
-        </div>
-        {mixKeys.length > 0 &&
-          <div className="current-mix">
-            {mixKeys.map(key => {
-              let playlist = this.state.currentMix[key];
-              return (
-                <Playlist
-                  key={`mix${key}`}
-                  name={<span><strong>{playlist.name}</strong> ({playlist.channel})</span>}
-                  action={() => this.removePlaylist(key)}
-                  actionIcon="remove"
-                />
-              );
-            })
-            }
-          </div>
-        }
-        {mixKeys.length > 1 &&
-          <div className="mix-footer">
-            <div className="footer-left">
-              <div><label>Mix Name</label></div>
-              <input
-                name="mix-name"
-                onChange={(e) => this.setState({mixName: e.target.value})}
-                value={this.state.mixName}
-              />
-            </div>
-            <div className="footer-right">
-              <button className="btn blue" onClick={() => this.createMix()}>Create</button>
-            </div>
-          </div>
-        }
-      </div>
-    );
   }
 }
 
