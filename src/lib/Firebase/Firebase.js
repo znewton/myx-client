@@ -35,3 +35,13 @@ function editMix(id, name, playlists, channels) {
     channels: channels
   })
 }
+
+/**
+ * Delete a mix by id.
+ * 
+ * @param {string} id 
+ */
+function deleteMix(id) {
+  let mixRef = firebase.database().ref(`/mixes/${firebase.auth().currentUser.uid}/${id}`);
+  mixRef.remove();
+}

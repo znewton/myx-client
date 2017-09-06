@@ -68,6 +68,21 @@ export default class Sidebar extends Component {
       mixes.unshift(mix);
       this.setState({mixes});
     });
+    mixesRef.on('child_changed', data => {
+      let mixes = this.state.mixes;
+      let mix = data.val();
+      mix.id = data.key;
+      let index = mixes.findIndex((m) => m.id === data.key);
+      mixes.splice(index, 1);
+      mixes.unshift(mix);
+      this.setState({mixes});
+    });
+    mixesRef.on('child_removed', data => {
+      let mixes = this.state.mixes;
+      let index = mixes.findIndex((m) => m.id === data.key);
+      mixes.splice(index, 1);
+      this.setState({mixes});
+    });
     mixesRef.orderByChild('name').once('value', snapshot => {
       let mixes = [];
       snapshot.forEach(childSnapshot => {
