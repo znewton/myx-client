@@ -5,14 +5,20 @@ import 'firebase/auth';
 import 'firebase/database';
 import './Sidebar.css';
 
+import FbHelpers from '../lib/Firebase/Firebase';
 import Mix from './Mix/Mix.js';
+import Mixer from '../Navbar/mixing/Mixer';
+import Modal from '../components/Modal/Modal';
+import Events from '../lib/Events/Events';
 
 export default class Sidebar extends Component {
   constructor () {
     super();
     this.state = {
       mixes: [],
-      searchTerm: ''
+      searchTerm: '',
+      editModalOpen: null,
+      deleteModalOpen: null,
     }
   }
   /**
@@ -30,6 +36,12 @@ export default class Sidebar extends Component {
         this.setState({mixes: []})
       }
     });
+  }
+  componentWillUnmount() {
+    const events = ['editModal', 'deleteModal'];
+    for (let i = 0; i < events.length; i++) {
+      Events.removeOneTimeEvent(`${events[i]}OpenToggle`);
+    }
   }
   render () {
     return (
@@ -49,6 +61,8 @@ export default class Sidebar extends Component {
         <div className="mixes-wrapper">
           {this.mixes()}
         </div>
+        {this.editModal()}
+        {this.deleteModal()}
       </div>
     );
   }
@@ -56,6 +70,11 @@ export default class Sidebar extends Component {
    * Miscellaneous Functions
    */
 
+  mixComparator(a,b) {
+    if (a.name < b.name) return -1;
+    if (a.name > b.name) return 1;
+    return 0;
+  }
   /**
    * Build the list of user mixes.
    */
@@ -66,6 +85,7 @@ export default class Sidebar extends Component {
       let mix = data.val();
       mix.id = data.key;
       mixes.unshift(mix);
+      mixes.sort(this.mixComparator);
       this.setState({mixes});
     });
     mixesRef.on('child_changed', data => {
@@ -75,6 +95,7 @@ export default class Sidebar extends Component {
       let index = mixes.findIndex((m) => m.id === data.key);
       mixes.splice(index, 1);
       mixes.unshift(mix);
+      mixes.sort(this.mixComparator);
       this.setState({mixes});
     });
     mixesRef.on('child_removed', data => {
@@ -90,6 +111,7 @@ export default class Sidebar extends Component {
         mix.id = childSnapshot.key;
         mixes.unshift(mix);
       });
+      mixes.sort(this.mixComparator);
       this.setState({mixes});
     })
   }
@@ -115,13 +137,84 @@ export default class Sidebar extends Component {
     return mixes.map(mix => (
       <Mix
         key={mix.id}
+        id={mix.id}
         onClick={() => this.props.onSelect(mix.id)}
+        onEdit={(e) => this.toggleMenu(e, 'editModal', mix.id)}
+        onDelete={(e) => this.toggleMenu(e, 'deleteModal', mix.id)}
         name={mix.name}
         channels={mix.channels}
         selected={mix.id === this.props.activeMix}
       />
     ));
   } 
+
+  /**
+   * Mix action functions.
+   */
+  
+  /**
+   * Open/close a menu. Does not add window click event for modals.
+   * 
+   * @param {*} e 
+   * @param {*} name 
+   */
+  toggleMenu(e, name, param) {
+    if (e) e.stopPropagation();
+    let open = this.state[`${name}Open`] ? null : param;
+    this.setState({[`${name}Open`]: open});
+    if (!name.toLowerCase().includes('modal') && open)
+      Events.addOneTimeEvent(window, 'click', () => this.setState({[`${name}Open`]: null}), `${name}OpenToggle`);
+  }
+  /**
+   * Close a menu.
+   * 
+   * @param {*} e 
+   * @param {*} name 
+   */
+  closeMenu(e, name) {
+    if (e) e.stopPropagation();
+    this.setState({[`${name}Open`]: null});
+    Events.removeOneTimeEvent(`${name}OpenToggle`);
+  }
+
+  /**
+   * Create a modal whose open state is handled by this state
+   * 
+   * @param {*} contents
+   * @param {*} header
+   * @param {string} name
+   * @param {string} openFromId
+   */
+  modal = (contents, header, name, openFromId) => 
+    <Modal
+      header={header}
+      handleClose={(e) => this.closeMenu(e, name)}
+      open={this.state[`${name}Open`] !== null}
+      bindTo={openFromId}
+    >
+      {contents}
+    </Modal>
+
+  editModal = () => this.modal(
+    <Mixer close={(e) => this.closeMenu(e, 'editModal')} id={this.state.editModalOpen} />, 
+    'Edit Mix', 'editModal', `Mix_${this.state.editModalOpen}`
+  );
+
+  deleteModal = () => this.modal(
+    this.deleteModalContents(), 'Delete Mix', 'deleteModal', `Mix_${this.state.deleteModalOpen}`
+  );
+
+  deleteModalContents = () => (
+    <div>
+      <div>Are you sure you want to delete this mix?</div>
+      <div className="delete-button-bar">
+        <button className="btn" onClick={(e) => this.closeMenu(e, 'deleteModal')}>Cancel</button>
+        <button className="btn blue" onClick={(e) => {
+          this.closeMenu(e, 'deleteModal');
+          FbHelpers.deleteMix(this.state.deleteModalOpen);
+        }}>Delete</button>
+      </div>
+    </div>);
 }
 
 Sidebar.propTypes = {

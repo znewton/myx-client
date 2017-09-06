@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import firebase from 'firebase/app';
 import axios from 'axios';
-import 'firebase/auth';
-import 'firebase/database';
 import queryString from 'query-string';
 import './Mixer.css';
 
-import FbHelpers from '../../lib/Firebase/Firebase.js';
+import FbHelpers from '../../lib/Firebase/Firebase';
 import Events from '../../lib/Events/Events';
 import Channel from './Channel/Channel';
 import Playlist from './Playlist/Playlist';
@@ -29,7 +26,27 @@ export default class Mixer extends Component {
   /**
    * Life-cycle functions
    */
-
+  componentDidMount() {
+    if (!this.props.id) return;
+    FbHelpers.getMix(this.props.id).then(mix => {
+      this.setState({
+        channels: mix.channels,
+        currentMix: this.getPlaylistNames(mix.playlists),
+        mixName: mix.name
+      });
+    });
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.id === this.props.id) return;
+    this.resetState();
+    if (this.props.id === null) return;
+    FbHelpers.getMix(this.props.id).then(mix => {
+      this.setState({
+        currentMix: this.getPlaylistNames(mix.playlists),
+        mixName: mix.name
+      });
+    });
+  }
   render () {
     const channelKeys = Object.keys(this.state.channels);
     const playlistKeys = Object.keys(this.state.selectedChannelPlaylists);
@@ -67,7 +84,10 @@ export default class Mixer extends Component {
               />
             </div>
             <div className="footer-right">
-              <button className="btn blue" onClick={() => this.createMix()}>Create</button>
+              {this.props.id ? 
+                <button className="btn blue" onClick={() => this.editMix()}>Save</button> : 
+                <button className="btn blue" onClick={() => this.createMix()}>Create</button>
+              }
             </div>
           </div>
         }
@@ -145,6 +165,19 @@ export default class Mixer extends Component {
    * Miscellaneous Functions
    */
 
+  /**
+   * Get playlist details.
+   * 
+   * @param {string[]} playlists
+   */
+  getPlaylistNames(playlists) {
+    let playlistMap = {};
+    for (let i = 0; i < playlists.length; i++) {
+      playlistMap[playlists[i]] = {name:playlists[i], channel: 'channel'};
+    }
+    console.log(playlistMap);
+    return playlistMap;
+  }
   resetState() {
     this.setState({
       searchTerm: '',
@@ -228,10 +261,22 @@ export default class Mixer extends Component {
     this.resetState();
     this.props.close();
   }
+  editMix() {
+    let mixPlayListKeys = Object.keys(this.state.currentMix);
+    let channels = [];
+    for (let key in this.state.currentMix) {
+      let channelName = this.state.currentMix[key].channel;
+      if (!channels.includes(channelName)) channels.push(channelName);
+    }
+    FbHelpers.editMix(this.props.id, this.state.mixName, mixPlayListKeys, channels);
+    this.resetState();
+    this.props.close();
+  }
 }
 
 Mixer.propTypes = {
-  close: PropTypes.func
+  close: PropTypes.func,
+  id: PropTypes.string
 }
 
 Mixer.defaultProps = {

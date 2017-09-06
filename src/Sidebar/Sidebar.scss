@@ -4,6 +4,7 @@
 
 .Sidebar {
   @include scrollbars(0.5em, #222);
+  z-index: 2;
   position: fixed;
   top: $navbar_height;
   height: 100vh-$navbar_height;
@@ -59,5 +60,43 @@
     padding-top: 3em;
     height: 100%;
     overflow-y: auto;
+  }
+  .delete-button-bar {
+    text-align: center;
+    margin-top: 1em;
+    button + button {
+      margin-left: 1em;
+    }
+  }
+  .btn {
+    font-weight: 600;
+    font-size: inherit;
+    font-family: inherit;
+    border: none;
+    border-radius: 3px;
+    background-color: transparent;
+    color: #333;
+    padding: 0.3em 0.5em;
+    transition: all 125ms ease;
+    line-height: 1.1em;
+    & > * {
+      vertical-align: middle;
+    }
+    &:focus {
+      outline: none;
+    }
+    &:hover {
+      cursor: pointer;
+      color: #111;
+      background-color: rgba(black, 0.1);
+    }
+    &.blue {
+      color: #eee;
+      background-color: darken($blue, 5%);
+      &:hover {
+        color: #fff;
+        background-color: $blue;
+      }
+    }
   }
 }
