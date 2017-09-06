@@ -16,6 +16,7 @@ export default class Mixer extends Component {
       searchTerm: '',
       searching: false,
       channels: {},
+      loadingPlaylists: false,
       selectedChannel: null,
       selectedChannelPlaylists: {},
       currentMix: {},
@@ -30,10 +31,10 @@ export default class Mixer extends Component {
     if (!this.props.id) return;
     FbHelpers.getMix(this.props.id).then(mix => {
       this.setState({
-        channels: mix.channels,
-        currentMix: this.getPlaylistNames(mix.playlists),
+        loadingPlaylists: true,
         mixName: mix.name
       });
+      this.getPlaylistNames(mix.playlists)
     });
   }
   componentDidUpdate(prevProps) {
@@ -42,9 +43,10 @@ export default class Mixer extends Component {
     if (this.props.id === null) return;
     FbHelpers.getMix(this.props.id).then(mix => {
       this.setState({
-        currentMix: this.getPlaylistNames(mix.playlists),
+        loadingPlaylists: true,
         mixName: mix.name
       });
+      this.getPlaylistNames(mix.playlists)
     });
   }
   render () {
@@ -70,7 +72,9 @@ export default class Mixer extends Component {
         </div>
         {mixKeys.length > 0 &&
           <div className="current-mix">
-            {this.currentMix(mixKeys)}
+            {this.state.loadingPlaylists ?
+              <div>Loading...</div> : 
+              this.currentMix(mixKeys)}
           </div>
         }
         {mixKeys.length > 1 &&
@@ -85,7 +89,7 @@ export default class Mixer extends Component {
             </div>
             <div className="footer-right">
               {this.props.id ? 
-                <button className="btn blue" onClick={() => this.editMix()}>Save</button> : 
+                <button className="btn blue" disabled={this.state.loadingPlaylists} onClick={() => this.editMix()}>Save</button> : 
                 <button className="btn blue" onClick={() => this.createMix()}>Create</button>
               }
             </div>
@@ -171,12 +175,25 @@ export default class Mixer extends Component {
    * @param {string[]} playlists
    */
   getPlaylistNames(playlists) {
-    let playlistMap = {};
-    for (let i = 0; i < playlists.length; i++) {
-      playlistMap[playlists[i]] = {name:playlists[i], channel: 'channel'};
-    }
-    console.log(playlistMap);
-    return playlistMap;
+    let params = queryString.stringify({playlists: playlists});
+    console.log(playlists);
+    axios.get(`https://myxx.herokuapp.com/playlistNames?${params}`)
+    .then(response => {
+      console.log(response)
+      if (response.data) {
+        let playlists = {};
+        let responseKeys = Object.keys(response.data);
+        for (let i = 0; i < responseKeys.length; i++) {
+          let playlistkey = responseKeys[i];
+          playlists[playlistkey] = response.data[playlistkey];
+        }
+        this.setState({
+          currentMix: playlists,
+          loadingPlaylists: false
+        });
+      }
+    })
+    .catch(error => console.log(error));
   }
   resetState() {
     this.setState({

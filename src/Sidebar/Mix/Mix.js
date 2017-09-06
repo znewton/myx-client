@@ -16,13 +16,12 @@ export default class Mix extends Component {
               <span key={i}>{channel}{i < this.props.channels.length-1 && ', '}</span>
             )}
           </div>
-          {/*<button className="settings-button" title="edit" onClick={(e) => this.props.onEdit(e)}>
+          <button className="settings-button" title="edit" onClick={(e) => this.props.onEdit(e)}>
             <span className="material-icons">settings</span>
-          </button>*/}
+          </button>
           <button className="delete-button" title="delete" onClick={(e) => this.props.onDelete(e)}>
             <span className="material-icons">delete</span>
           </button>
-
       </div>
     );
   }
