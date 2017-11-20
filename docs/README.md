@@ -6,7 +6,7 @@ You can find out more about how to use Create React App  [here](https://github.c
 # Myx (client)
 This is the repository for the front-end of the *myx* app.
 
-Information on the backend can be found in its [repository](https://github.com/znewton/myxx-api).
+Information on the backend can be found in its [repository](https://github.com/znewton/myx-api).
 
 ## Purpose
 I made this app because I enjoy listening to music curators on [YouTube](https://youtube.com);
