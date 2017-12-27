@@ -42,9 +42,9 @@ Queue.propTypes = {
   selectedId: PropTypes.string,
   videos: PropTypes.array,
   onSelect: PropTypes.func
-}
+};
 
 Queue.defaultProps = {
   videos: [],
   onSelect: () => {}
-}
+};

@@ -42,6 +42,6 @@ export default class Help extends Component {
   }
 }
 
-Help.propTypes = {}
+Help.propTypes = {};
 
-Help.defaultProps = {}
+Help.defaultProps = {};
