@@ -4,6 +4,8 @@ import axios from 'axios';
 import queryString from 'query-string';
 import './Mixer.css';
 
+import { endpoint } from '../../lib/constants';
+
 import FbHelpers from '../../lib/Firebase/Firebase';
 import Events from '../../lib/Events/Events';
 import Channel from './Channel/Channel';
@@ -102,6 +104,9 @@ export default class Mixer extends Component {
    * Render helpers
    */
 
+  /**
+   * Get the empty search state.
+   */
   emptySearchState = () => this.state.searching ?
     <div className="channel-empty-state loading-dots">Searching</div>
     : <div className="channel-empty-state">No Results</div>;
@@ -159,6 +164,7 @@ export default class Mixer extends Component {
   channelPlaylists = (playlistKeys) => 
     playlistKeys.filter(key => !this.state.currentMix[key]).map(key => (
       <Playlist
+        key={key}
         name={this.state.selectedChannelPlaylists[key].name}
         action={() => this.addPlaylist(key)}
         actionIcon="add"
@@ -177,7 +183,7 @@ export default class Mixer extends Component {
   getPlaylistNames(playlists) {
     let params = queryString.stringify({playlists: playlists});
     console.log(playlists);
-    axios.get(`https://myxx.herokuapp.com/playlistNames?${params}`)
+    axios.get(`${endpoint}/playlistNames?${params}`)
     .then(response => {
       console.log(response)
       if (response.data) {
@@ -216,7 +222,7 @@ export default class Mixer extends Component {
       return;
     }
     let params = queryString.stringify({q: this.state.searchTerm});
-    axios.get(`https://myxx.herokuapp.com/channels?${params}`)
+    axios.get(`${endpoint}/channels?${params}`)
       .then(response => {
         if (response.data && response.data.length) {
           let channels = {};
@@ -239,7 +245,7 @@ export default class Mixer extends Component {
       return;
     }
     this.setState({selectedChannel: channelId});
-    axios.get(`https://myxx.herokuapp.com/playlists/${channelId}`)
+    axios.get(`${endpoint}/playlists/${channelId}`)
       .then(response => {
         if (response.data && response.data.length) {
           let playlists = {};

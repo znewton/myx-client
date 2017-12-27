@@ -6,6 +6,8 @@ import 'firebase/auth';
 import axios from 'axios';
 import queryString from 'query-string';
 
+import { endpoint } from './lib/constants';
+
 import Navbar from './Navbar/Navbar';
 import Sidebar from './Sidebar/Sidebar';
 import Player from './Player/Player';
@@ -22,7 +24,7 @@ export default class App extends Component {
       selectedVideo: null,
       currentVideoId: null,
       loggedIn: false,
-    }
+    };
     this.state = this.initialState;
     this.currentMix = null;
     this.queue = [];
@@ -39,6 +41,13 @@ export default class App extends Component {
         this.setState(this.initialState);
       }
     });
+    // ping heroku server to wake up dormant dyno
+    axios.get(`${endpoint}/ping`)
+      .then(response => {
+        if (response.data && response.data.message) {
+          console.log(response.data.message);
+        }
+      }).catch(error => console.log(error));
   }
   render () {
     if ((!this.state.loading && !this.queue.length) || (this.currentMix !== this.state.selectedMixId && this.state.selectedMixOrderedVideos.length)) {
@@ -49,7 +58,7 @@ export default class App extends Component {
           title: video.title,
           description: video.channelTitle,
           thumbnail: video.thumbnails ? video.thumbnails.medium.url : null,
-        }
+        };
       });
       this.currentMix = this.state.selectedMixId;
     } else if (this.state.loading) {
@@ -58,7 +67,7 @@ export default class App extends Component {
     let playerPlaceholder = <h1>Select or Create a Mix</h1>;
     if (this.state.loggedIn) {
       if (this.state.loading) {
-        playerPlaceholder = <h1 className="loading-dots">Generating mix</h1>
+        playerPlaceholder = <h1 className="loading-dots">Generating mix</h1>;
       }
     } else {
       playerPlaceholder = <h1>Login or Signup to Get Started</h1>;
@@ -102,9 +111,9 @@ export default class App extends Component {
    * @param {Object[]} playlists 
    */
   getMixSongs (playlists) {
-    this.setState({loading: true, currentVideoId: null})
+    this.setState({loading: true, currentVideoId: null});
     let params = queryString.stringify({playlists: playlists});
-    axios.get(`https://myxx.herokuapp.com/mix?${params}`)
+    axios.get(`${endpoint}/mix?${params}`)
       .then(response => {
         if (response.data && response.data.videoMap && response.data.orderedVideoIds) {
           let videoMap = response.data.videoMap;
