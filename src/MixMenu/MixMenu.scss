@@ -2,13 +2,13 @@
 @import "../sass/mixins";
 @import "../sass/mixin";
 
-.Sidebar {
+.MixMenu {
   @include scrollbars(0.5em, #222);
   z-index: 2;
   position: fixed;
   top: $navbar_height;
   height: 100vh-$navbar_height;
-  width: $sidebar_width;
+  width: $side_menu_width;
   // border-right: 2px solid #2a2a2a;
   overflow-x: hidden;
   overflow-y: auto;
@@ -16,8 +16,8 @@
     z-index: 20;
     background-color: #333;
     position: fixed;
-    width: $sidebar_width;
-    padding: $sidebar_width*3/100;
+    width: $side_menu_width;
+    padding: $side_menu_width*3/100;
     padding-top: 0;
     // width: 94%;
     // margin: 0 3% 3% 3%;

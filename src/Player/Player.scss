@@ -4,8 +4,8 @@
 .Player {
   position: fixed;
   height: 100vh - $queue_height - $navbar_height;
-  width: 100vw - $sidebar_width;
-  left: $sidebar_width;
+  width: 100vw - $side_menu_width;
+  left: $side_menu_width;
   top: $navbar_height;
   z-index: 1;
   display: flex;

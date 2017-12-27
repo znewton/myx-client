@@ -6,9 +6,9 @@
   @include scrollbars(0.5em, #222);
   position: fixed;
   height: $queue_height;
-  left: $sidebar_width;
+  left: $side_menu_width;
   bottom: 0;
-  width: 100vw-$sidebar_width;
+  width: 100vw-$side_menu_width;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;

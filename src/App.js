@@ -9,7 +9,7 @@ import queryString from 'query-string';
 import { endpoint } from './lib/constants';
 
 import Navbar from './Navbar/Navbar';
-import Sidebar from './Sidebar/Sidebar';
+import MixMenu from './MixMenu/MixMenu';
 import Player from './Player/Player';
 import Queue from './Queue/Queue';
 
@@ -75,7 +75,7 @@ export default class App extends Component {
     return (
       <div className="App">
         <Navbar currentMixName={this.state.selectedMixName} />
-        <Sidebar onSelect={this.handleMixSelect.bind(this)} activeMix={this.state.selectedMixId} />
+        <MixMenu onSelect={this.handleMixSelect.bind(this)} activeMix={this.state.selectedMixId} />
         <Player
           id={this.state.currentVideoId}
           onEnd={this.handleNextVideo.bind(this)}

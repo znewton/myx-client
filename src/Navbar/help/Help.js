@@ -28,10 +28,10 @@ export default class Help extends Component {
         </ol>
         <h2>Using a mix</h2>
         <p>
-          After creating a mix, it will appear in the left sidebar. You can also search through your mixes if you end up creating a lot of them.
+          After creating a mix, it will appear in the left side menu. You can also search through your mixes if you end up creating a lot of them.
         </p>
         <ol>
-          <li>Select a Mix from the left sidebar by clicking it</li>
+          <li>Select a Mix from the left side menu by clicking it</li>
           <li>The mix will autoplay from here so you can skip the rest if you want</li>
           <li>Pausing, playing, scrubbing, etc. is all the same as a YouTube video</li>
           <li>To go to the next song, click the first song in the left of the Queue at the bottom of the screen</li>

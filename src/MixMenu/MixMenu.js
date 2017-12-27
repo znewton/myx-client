@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import './Sidebar.css';
+import './MixMenu.css';
 
 import FbHelpers from '../lib/Firebase/Firebase';
 import Mix from './Mix/Mix.js';
@@ -11,7 +11,7 @@ import Mixer from '../Navbar/mixing/Mixer';
 import Modal from '../components/Modal/Modal';
 import Events from '../lib/Events/Events';
 
-export default class Sidebar extends Component {
+export default class MixMenu extends Component {
   constructor () {
     super();
     this.state = {
@@ -45,7 +45,7 @@ export default class Sidebar extends Component {
   }
   render () {
     return (
-      <div className="Sidebar">
+      <div className="MixMenu">
         {this.state.mixes.length > 0 &&
           <div className="mix-search-wrapper">
             <input
@@ -217,11 +217,11 @@ export default class Sidebar extends Component {
     </div>);
 }
 
-Sidebar.propTypes = {
+MixMenu.propTypes = {
   activeMix: PropTypes.string,
   onSelect: PropTypes.func
 }
 
-Sidebar.defaultProps = {
+MixMenu.defaultProps = {
   onSelect: () => {}
 }
