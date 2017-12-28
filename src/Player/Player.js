@@ -27,10 +27,10 @@ Player.propTypes = {
     PropTypes.element,
     PropTypes.string
   ])
-}
+};
 
 Player.defaultProps = {
   onEnd: () => {},
   id: null,
   emptyMessage: <h1>Select or Create a Mix</h1>
-}
+};

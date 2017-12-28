@@ -30,6 +30,24 @@ p {
 		@content;
 	}
 }
+
+@mixin bp-large-inverse {
+	@media only screen and (min-width: 60em) {
+		@content;
+	}
+}
+
+@mixin bp-medium-inverse {
+	@media only screen and (min-width: 50em) {
+		@content;
+	}
+}
+
+@mixin bp-small-inverse {
+	@media only screen and (min-width: 40em) {
+		@content;
+	}
+}
 /**
 USAGE
 .side_menu {

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './Navbar.css';
-import firebase from 'firebase/app';
-import 'firebase/auth';
 
 import Logo from '../components/Logo/Logo';
 import Auth from './auth/Auth';
@@ -19,27 +17,19 @@ export default class Navbar extends Component {
   constructor () {
     super();
     this.state = {
+      // modals & dropdown menus
       authModalOpen: false,
       settingsMenuOpen: false,
       createMixModalOpen: false,
       aboutModalOpen: false,
       helpModalOpen: false,
-      authType: 'login',
-      loggedIn: false,
+      // auth
+      authType: 'login'
     }
   }
   /**
    * React Life-cycle Functions
    */
-  componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
-      if (user) {
-        this.setState({loggedIn: true});
-      } else {
-        this.setState({loggedIn: false});
-      }
-    })
-  }
   componentWillUnmount() {
     const events = ['authModal', 'settingsMenu', 'createMix'];
     for (let i = 0; i < events.length; i++) {
@@ -51,6 +41,12 @@ export default class Navbar extends Component {
       <nav className="Navbar">
         <div className="nav-left">
           <span className="brand" title="My Mix (Beta)">
+            <span 
+              className="material-icons icon-btn side-menu-button"
+              onClick={this.toggleLeftMenu.bind(this)}
+            >
+              {this.props.leftMenuOpen ? 'close' : 'playlist_play'}
+            </span>
             <Logo /><sup>Beta</sup>
           </span>
         </div>
@@ -58,9 +54,9 @@ export default class Navbar extends Component {
           <span className="mix-name">{this.props.currentMixName}</span>
         </div>
         <div className="nav-right">
-          {firebase.auth().currentUser ?
+          {this.props.loggedIn ?
             <span>
-              <button className="nav-btn blue" id="create_mix_button" onClick={(e) => this.toggleMenu(e, 'createMixModal')}>
+              <button className="nav-btn blue hide-mobile" id="create_mix_button" onClick={(e) => this.toggleMenu(e, 'createMixModal')}>
                 <span className="material-icons">add</span>
                 <span>Create Mix</span>
               </button>
@@ -68,6 +64,7 @@ export default class Navbar extends Component {
               <button className="icon-btn" id="settings_button" onClick={(e) => this.toggleMenu(e,'settingsMenu')}><span className="material-icons">more_vert</span></button>
               <DropMenu open={this.state.settingsMenuOpen} from={Positioning.TOPRIGHT} bindTo="#settings_button">
                 {/* <button onClick={(e) => this.closeMenu(e, 'settingsMenu')}><span className="material-icons">settings</span><span>Settings</span></button> */}
+                <button onClick={(e) => this.toggleMenu(e,'createMixModal')} className="hide-desktop"><span className="material-icons">add_circle_outline</span><span>Create Mix</span></button>
                 <button onClick={(e) => this.toggleMenu(e, 'aboutModal')}><span className="material-icons">info_outline</span><span>About</span></button>
                 <button onClick={(e) => this.toggleMenu(e, 'helpModal')}><span className="material-icons">help_outline</span><span>Help</span></button>
                 <span className="separator" />
@@ -84,6 +81,12 @@ export default class Navbar extends Component {
               {this.authModal()}
             </span>
           }
+          <span 
+            className="material-icons icon-btn side-menu-button"
+            onClick={this.toggleRightMenu.bind(this)}
+          >
+            {this.props.rightMenuOpen ? 'close' : 'queue_music'}
+          </span>
         </div>
       </nav>
     );
@@ -108,7 +111,7 @@ export default class Navbar extends Component {
    * Sign out the user through Firebase.
    */
   handleSignOut() {
-    firebase.auth().signOut();
+    this.props.signOut();
   }
   /**
    * Open/close a menu. Does not add window click event for modals.
@@ -174,10 +177,26 @@ export default class Navbar extends Component {
     >
       {contents}
     </Modal>
+  
+  /**
+   * Side Menus
+   */
+  toggleLeftMenu () {
+    this.props.toggleLeftMenu()
+  }
+  toggleRightMenu () {
+    this.props.toggleRightMenu()
+  }
 }
 
 Navbar.propTypes = {
-  currentMixName: PropTypes.string
+  loggedIn: PropTypes.bool,
+  currentMixName: PropTypes.string,
+  signOut: PropTypes.func,
+  leftMenuOpen: PropTypes.bool,
+  toggleLeftMenu: PropTypes.func,
+  rightMenuOpen: PropTypes.bool,
+  toggleRightMenu: PropTypes.func,
 }
 
 Navbar.defaultProps = {

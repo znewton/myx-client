@@ -32,9 +32,15 @@
     button {
       margin-right: 0.3em;
     }
+    .side-menu-button {
+      margin-right: 0.5rem;
+    }
   }
   .nav-middle {
     text-align: center;
+    @include bp-medium {
+      display: none;
+    }
   }
   .nav-right {
     text-align: right;
@@ -46,6 +52,8 @@
     font-size: 1.66em;
     sup {
       font-size: 0.5em;
+      height: 0;
+      line-height: 0;
       padding-left: 0.25em;
     }
   }
@@ -107,5 +115,10 @@
       line-height: inherit;
       font-size: 24px;
     }
+  }
+  .side-menu-button {
+    // padding: 0.4rem;
+    line-height: inherit;
+    font-size: 28px;
   }
 }

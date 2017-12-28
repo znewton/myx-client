@@ -17,13 +17,18 @@ export default class App extends Component {
   constructor () {
     super();
     this.initialState = {
+      // video selection
       selectedMixId: null,
       selectedMixName: '',
       selectedMixOrderedVideos: [],
       selectedMixVideoMap: {},
       selectedVideo: null,
       currentVideoId: null,
+      // auth
       loggedIn: false,
+      // side menus
+      mixMenuOpen: true,
+      queueOpen: false
     };
     this.state = this.initialState;
     this.currentMix = null;
@@ -47,7 +52,7 @@ export default class App extends Component {
         if (response.data && response.data.message) {
           console.log(response.data.message);
         }
-      }).catch(error => console.log(error));
+      }).catch(error => console.error(error));
   }
   render () {
     if ((!this.state.loading && !this.queue.length) || (this.currentMix !== this.state.selectedMixId && this.state.selectedMixOrderedVideos.length)) {
@@ -74,14 +79,30 @@ export default class App extends Component {
     }
     return (
       <div className="App">
-        <Navbar currentMixName={this.state.selectedMixName} />
-        <MixMenu onSelect={this.handleMixSelect.bind(this)} activeMix={this.state.selectedMixId} />
+        <Navbar 
+          loggedIn={this.state.loggedIn} 
+          currentMixName={this.state.selectedMixName} 
+          signOut={this.handleSignOut}
+          leftMenuOpen={this.state.mixMenuOpen}
+          toggleLeftMenu={this.toggleMixMenu.bind(this)}
+          rightMenuOpen={this.state.queueOpen}
+          toggleRightMenu={this.toggleQueue.bind(this)}
+        />
+        <MixMenu 
+          onSelect={this.handleMixSelect.bind(this)} 
+          activeMix={this.state.selectedMixId} 
+          open={this.state.mixMenuOpen}
+        />
         <Player
           id={this.state.currentVideoId}
           onEnd={this.handleNextVideo.bind(this)}
           emptyMessage={playerPlaceholder}
         />
-        <Queue videos={this.queue} onSelect={this.handleVideoSelect.bind(this)} selectedId={this.state.selectedVideo} />
+        <Queue 
+          videos={this.queue} 
+          onSelect={this.handleVideoSelect.bind(this)} 
+          selectedId={this.state.selectedVideo} 
+        />
       </div>
     );
   }
@@ -142,5 +163,19 @@ export default class App extends Component {
     let currentVideo = this.state.selectedVideo;
     let nextVideo = orderedVideos[orderedVideos.indexOf(currentVideo) + 1];
     this.handleVideoSelect(nextVideo);
+  }
+
+  handleSignOut () {
+    firebase.auth().signOut();
+  }
+
+  toggleMixMenu () {
+    let mixMenuOpen = this.state.mixMenuOpen;
+    this.setState({mixMenuOpen: !mixMenuOpen});
+  }
+
+  toggleQueue () {
+    let queueOpen = this.state.queueOpen;
+    this.setState({queueOpen: !queueOpen});
   }
 }

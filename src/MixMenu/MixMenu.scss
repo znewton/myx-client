@@ -7,14 +7,15 @@
   z-index: 2;
   position: fixed;
   top: $navbar_height;
-  height: 100vh-$navbar_height;
+  height: calc(100vh - var(--navbar_height));
   width: $side_menu_width;
+  background-color: rgba(#3f3f3f, 0.5);
+  @include box-shadow(3px 0 3px rgba(black, 0.1));
   // border-right: 2px solid #2a2a2a;
   overflow-x: hidden;
   overflow-y: auto;
   .mix-search-wrapper {
     z-index: 20;
-    background-color: #333;
     position: fixed;
     width: $side_menu_width;
     padding: $side_menu_width*3/100;

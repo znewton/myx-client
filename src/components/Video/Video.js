@@ -22,7 +22,7 @@ export default class Video extends Component {
 	  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 	  // Replace the 'ytplayer' element with an <iframe> and
 	  // YouTube player after the API code downloads.
-		this.setupPlayer(this.props.id)
+		this.setupPlayer(this.props.id);
   }
 	componentWillReceiveProps(newProps) {
 		if (newProps.id !== this.props.id) {
@@ -103,12 +103,12 @@ export default class Video extends Component {
 			return {
 				width: height/ratio,
 				height: height
-			}
+			};
 		}
 		return {
 			width:  width,
 			height: width*ratio
-		}
+		};
 	}
 }
 
@@ -120,7 +120,7 @@ Video.propTypes = {
 	onPause: PropTypes.func,
 	onBuffer: PropTypes.func,
 	onCued: PropTypes.func,
-}
+};
 
 Video.defaultProps = {
 	onPlay: () => {},
@@ -128,4 +128,4 @@ Video.defaultProps = {
 	onPause: () => {},
 	onBuffer: () => {},
 	onCued: () => {},
-}
+};
