@@ -33,8 +33,11 @@ export default class Queue extends Component {
         video.title.toLowerCase().includes(this.state.searchTerm) ||
         video.description.toLowerCase().includes(this.state.searchTerm));
     }
+    let className = 'Queue';
+    if (this.props.open) className += ' open';
+    if (this.props.partialOpen) className += ' part-open';
     return (
-      <div className={'Queue' + (this.props.open ? ' open' : '')}>
+      <div className={className}>
         {this.props.videos.length > 0 &&
           <div className="queue-search-wrapper">
             <input
@@ -77,7 +80,8 @@ Queue.propTypes = {
   selectedId: PropTypes.string,
   videos: PropTypes.array,
   onSelect: PropTypes.func,
-  open: PropTypes.bool
+  open: PropTypes.bool,
+  partialOpen: PropTypes.bool,
 };
 
 Queue.defaultProps = {

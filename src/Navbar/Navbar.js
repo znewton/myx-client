@@ -44,6 +44,8 @@ export default class Navbar extends Component {
             <span 
               className="material-icons icon-btn side-menu-button"
               onClick={this.toggleLeftMenu.bind(this)}
+              onMouseEnter={() => this.props.partialToggleLeftMenu(true)}
+              onMouseLeave={() => this.props.partialToggleLeftMenu(false)}
             >
               {this.props.leftMenuOpen ? 'close' : 'playlist_play'}
             </span>
@@ -84,6 +86,8 @@ export default class Navbar extends Component {
           <span 
             className={'material-icons icon-btn side-menu-button' + (this.props.currentMixName ? '' : ' disabled')}
             onClick={this.toggleRightMenu.bind(this)}
+            onMouseEnter={() => this.props.partialToggleRightMenu(true)}
+            onMouseLeave={() => this.props.partialToggleRightMenu(false)}
           >
             {this.props.rightMenuOpen ? 'close' : 'queue_music'}
           </span>
@@ -195,10 +199,16 @@ Navbar.propTypes = {
   signOut: PropTypes.func,
   leftMenuOpen: PropTypes.bool,
   toggleLeftMenu: PropTypes.func,
+  partialToggleLeftMenu: PropTypes.func,
   rightMenuOpen: PropTypes.bool,
   toggleRightMenu: PropTypes.func,
+  partialToggleRightMenu: PropTypes.func,
 }
 
 Navbar.defaultProps = {
-  currentMixName: ''
+  currentMixName: '',
+  toggleLeftMenu: () => {},
+  partialToggleLeftMenu: () => {},
+  toggleRightMenu: () => {},
+  partialToggleRightMenu: () => {},
 }

@@ -44,8 +44,11 @@ export default class MixMenu extends Component {
     }
   }
   render () {
+    let className = 'MixMenu';
+    if (this.props.open) className += ' open';
+    if (this.props.partialOpen) className += ' part-open';
     return (
-      <div className={'MixMenu' + (this.props.open ? ' open' : '')}>
+      <div className={className}>
         {this.state.mixes.length > 0 &&
           <div className="mix-search-wrapper">
             <input
@@ -220,7 +223,8 @@ export default class MixMenu extends Component {
 MixMenu.propTypes = {
   activeMix: PropTypes.string,
   onSelect: PropTypes.func,
-  open: PropTypes.bool
+  open: PropTypes.bool,
+  partialOpen: PropTypes.bool,
 }
 
 MixMenu.defaultProps = {

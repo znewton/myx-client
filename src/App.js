@@ -28,7 +28,9 @@ export default class App extends Component {
       loggedIn: false,
       // side menus
       mixMenuOpen: true,
-      queueOpen: false
+      queueOpen: false,
+      partialMixMenuOpen: false,
+      partialQueueOpen: false
     };
     this.state = this.initialState;
     this.currentMix = null;
@@ -85,19 +87,23 @@ export default class App extends Component {
           signOut={this.handleSignOut}
           leftMenuOpen={this.state.mixMenuOpen}
           toggleLeftMenu={this.toggleMixMenu.bind(this)}
+          partialToggleLeftMenu={this.partialToggleMixMenu.bind(this)}
           rightMenuOpen={this.state.queueOpen}
           toggleRightMenu={this.toggleQueue.bind(this)}
+          partialToggleRightMenu={this.partialToggleQueue.bind(this)}
         />
         <Queue 
           videos={this.queue} 
           onSelect={this.handleVideoSelect.bind(this)} 
           selectedId={this.state.selectedVideo} 
           open={this.state.queueOpen}
+          partialOpen={this.state.partialQueueOpen}
         />
         <MixMenu 
           onSelect={this.handleMixSelect.bind(this)} 
           activeMix={this.state.selectedMixId} 
           open={this.state.mixMenuOpen}
+          partialOpen={this.state.partialMixMenuOpen}
         />
         <Player
           id={this.state.currentVideoId}
@@ -125,6 +131,7 @@ export default class App extends Component {
         this.setState({selectedMixId: mixId, selectedMixName: name});
         this.getMixSongs(playlists);
         this.toggleMixMenu();
+        this.partialToggleMixMenu(false);
         setTimeout(() => {
           this.toggleQueue();
         }, 200);
@@ -175,12 +182,26 @@ export default class App extends Component {
   }
 
   toggleMixMenu () {
-    let mixMenuOpen = this.state.mixMenuOpen;
-    this.setState({mixMenuOpen: !mixMenuOpen});
+    let mixMenuOpen = !this.state.mixMenuOpen;
+    this.setState({
+      mixMenuOpen: mixMenuOpen
+    });
   }
 
   toggleQueue () {
-    let queueOpen = this.state.queueOpen;
-    this.setState({queueOpen: !queueOpen});
+    let queueOpen = !this.state.queueOpen;
+    this.setState({
+      queueOpen: queueOpen
+    });
+  }
+
+  partialToggleMixMenu (enter) {
+    if (this.state.mixMenuOpen) return;
+    this.setState({partialMixMenuOpen: enter});
+  }
+
+  partialToggleQueue (enter) {
+    if (this.state.queueOpen) return;
+    this.setState({partialQueueOpen: enter});
   }
 }
