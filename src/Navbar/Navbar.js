@@ -82,7 +82,7 @@ export default class Navbar extends Component {
             </span>
           }
           <span 
-            className="material-icons icon-btn side-menu-button"
+            className={'material-icons icon-btn side-menu-button' + (this.props.currentMixName ? '' : ' disabled')}
             onClick={this.toggleRightMenu.bind(this)}
           >
             {this.props.rightMenuOpen ? 'close' : 'queue_music'}

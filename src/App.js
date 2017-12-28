@@ -88,6 +88,12 @@ export default class App extends Component {
           rightMenuOpen={this.state.queueOpen}
           toggleRightMenu={this.toggleQueue.bind(this)}
         />
+        <Queue 
+          videos={this.queue} 
+          onSelect={this.handleVideoSelect.bind(this)} 
+          selectedId={this.state.selectedVideo} 
+          open={this.state.queueOpen}
+        />
         <MixMenu 
           onSelect={this.handleMixSelect.bind(this)} 
           activeMix={this.state.selectedMixId} 
@@ -97,11 +103,6 @@ export default class App extends Component {
           id={this.state.currentVideoId}
           onEnd={this.handleNextVideo.bind(this)}
           emptyMessage={playerPlaceholder}
-        />
-        <Queue 
-          videos={this.queue} 
-          onSelect={this.handleVideoSelect.bind(this)} 
-          selectedId={this.state.selectedVideo} 
         />
       </div>
     );
@@ -123,6 +124,10 @@ export default class App extends Component {
         let playlists = snapshot.val().playlists;
         this.setState({selectedMixId: mixId, selectedMixName: name});
         this.getMixSongs(playlists);
+        this.toggleMixMenu();
+        setTimeout(() => {
+          this.toggleQueue();
+        }, 200);
       }
     }).catch(error => console.log(error));
   }

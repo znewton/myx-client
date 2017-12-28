@@ -15,11 +15,19 @@ export default class QueuedVideo extends Component {
           <img src={this.props.thumbnail} alt="video thumbnail" /> :
           <span /> }
           <span className="material-icons play-button">play_arrow</span>
+          <div className="duration"></div>
         </div>
         <div className="info">
-          <div className="title">{this.props.title}</div>
-          <div className="duration"></div>
-          <div className="description">
+          <div 
+            className="title" 
+            title={this.props.title}
+          >
+            {this.props.title}
+          </div>
+          <div 
+            className="description" 
+            title={this.props.description}
+          >
             {this.props.description}
           </div>
         </div>

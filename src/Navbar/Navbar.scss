@@ -115,6 +115,10 @@
       line-height: inherit;
       font-size: 24px;
     }
+    &.disabled {
+      opacity: 0.3;
+      pointer-events: none;
+    }
   }
   .side-menu-button {
     // padding: 0.4rem;

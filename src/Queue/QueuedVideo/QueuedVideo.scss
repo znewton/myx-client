@@ -3,18 +3,23 @@
 @import "../../sass/mixin";
 
 .QueuedVideo {
-  $thumbnail_width: $queue_height*4/5*16/9;
-  $thumbnail_height: $queue_height*4/5;
-  display: inline-block;
+  $width: $side_menu_width*94/100;
+  --width: $width;
+  $height: 4rem;
+  --height: $height;
+  $thumbnail_width: $height*16/9;
+  --thumbnail_width: $thumbnail_width;
+  $thumbnail_height: $height;
+  --thumbnail_height: $thumbnail_height;
   white-space: normal;
-  width: $thumbnail_width + 20vh;
-  height: $thumbnail_height;
-  margin-top: $queue_height/20;
-  margin-left: 0.75em;
-  background-color: #3e3e3e;
-  color: #bebebe;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: $width;
+  height: $height;
+  margin: 3%;
+  background-color: #3e3e3e;
+  transition: all 125ms ease;
+  color: #bebebe;
   @include box-shadow(1px 1px 3px rgba(black, 0.2));
   &:hover:not(.selected) {
     background-color: #444;
@@ -25,9 +30,10 @@
     }
   }
   &.selected {
-    border-left: 1vh solid $blue;
+    --border_width: 0.4rem;
+    border-left: var(--border_width) solid $blue;
     .info {
-      width: 19vh
+      width: calc(calc(var(--width) - var(--thumbnail_width)) - calc(var(--border_width) + 0.2rem));
     }
   }
   .thumbnail {
@@ -43,7 +49,7 @@
     }
     .play-button {
       position: absolute;
-      z-index: 3;
+      z-index: 4;
       top: 0;
       left: 0;
       line-height: $thumbnail_height;
@@ -60,8 +66,8 @@
   .info {
     vertical-align: top;
     display: inline-block;
-    width: 20vh;
-    padding: 0.5em 0.75em;
+    width: calc(calc(var(--width) - var(--thumbnail_width)) - 0.2rem);
+    padding: 0.5em 0.35em;
     text-overflow: ellipsis;
   }
   .title {

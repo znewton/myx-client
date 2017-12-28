@@ -4,22 +4,77 @@
 
 .Queue {
   @include scrollbars(0.5em, #222);
+  --search_height: 3em;
   position: fixed;
-  height: $queue_height;
-  left: $side_menu_width;
-  bottom: 0;
-  width: 100vw-$side_menu_width;
-  overflow-x: auto;
-  overflow-y: hidden;
+  z-index: 3;
+  background-color: rgba(#373737, 0.95);
+  top: $navbar_height;
+  height: calc(100vh - var(--navbar_height));
+  width: $side_menu_width;
+  right: -$side_menu_width;
+  transform: translateX(0);
+  @include transition(transform 125ms ease);
+  &.open {
+    transform: translateX(-$side_menu_width);
+    @include box-shadow(-3px 0 3px rgba(black, 0.1));
+  }
+  overflow-y: auto;
+  overflow-x: hidden;
   white-space: nowrap;
   .wrapper {
-    height: 100%;
-    vertical-align: top;
+    top: calc(var(--search_height) + 0.2rem);
+    height: calc(calc(100% - var(--search_height)) - 0.2rem);
+    overflow-y: auto;
+  }
+  
+  .queue-search-wrapper {
+    z-index: 20;
+    position: fixed;
+    width: $side_menu_width;
+    padding: $side_menu_width*3/100;
+    padding-top: 0.3rem;
+    background-color: inherit;
+    // width: 94%;
+    // margin: 0 3% 3% 3%;
+    input {
+      font-size: inherit;
+      font-family: inherit;
+      padding-left: 2em;
+      border: none;
+      border-bottom: 1px solid #666;
+      width: 100%;
+      line-height: 2em;
+      font-size: 1em;
+      vertical-align: bottom;
+      background-color: transparent;
+      color: #fff;
+      @include transition(all 125ms ease);
+      @include placeholder {
+        color: #666;
+      };
+      &:focus {
+        outline: none;
+        border-color: $blue;
+        & + .searchIcon {
+          color: $blue;
+        }
+      }
+    }
+    .searchIcon {
+      @include transition(all 125ms ease);
+      z-index: 1;
+      color: #666;
+      position: absolute;
+      left: 0.4em;
+      top: 0.75em;
+      font-size: 1.2em;
+      display: block;
+    }
   }
 }
 
-.Queue, .Queue .wrapper {
-  transform:rotateX(180deg);
-  -ms-transform:rotateX(180deg); /* IE 9 */
-  -webkit-transform:rotateX(180deg); /* Safari and Chrome */
-}
+// .Queue, .Queue .wrapper {
+//   transform:rotateX(180deg);
+//   -ms-transform:rotateX(180deg); /* IE 9 */
+//   -webkit-transform:rotateX(180deg); /* Safari and Chrome */
+// }

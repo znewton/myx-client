@@ -19,7 +19,7 @@ export default class MixMenu extends Component {
       searchTerm: '',
       editModalOpen: null,
       deleteModalOpen: null,
-    }
+    };
   }
   /**
    * Life-cycle functions

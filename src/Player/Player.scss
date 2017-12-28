@@ -3,7 +3,7 @@
 
 .Player {
   position: fixed;
-  height: calc(100vh - var(--navbar_height));
+  height: calc(calc(100vh - var(--navbar_height)) - var(--controls_height));
   width: 100vw;
   left: 0;
   top: $navbar_height;

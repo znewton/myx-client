@@ -5,23 +5,50 @@ import './Queue.css';
 import QueuedVideo from './QueuedVideo/QueuedVideo.js';
 
 export default class Queue extends Component {
+  constructor () {
+    super();
+    this.state = {
+      searchTerm: ''
+    };
+  }
   /**
    * Life-cycle functions
    */
   
   componentWillReceiveProps(newProps) {
+    if (newProps.selectedId === this.props.selectedId) return;
     let selectedVideo = newProps.selectedId;
     let queueElement = document.getElementById(`queued-${selectedVideo}`);
     if (queueElement) {
-      let queueRef = this.refs.Queue;
-      queueRef.scrollLeft = queueElement.offsetLeft-10;
+      queueElement.scrollIntoView({
+        behavior: "smooth"
+      });
     }
   }
   render () {
+    let videos = this.props.videos;
+    if (this.state.searchTerm) {
+      videos = videos
+      .filter(video =>
+        video.title.toLowerCase().includes(this.state.searchTerm) ||
+        video.description.toLowerCase().includes(this.state.searchTerm));
+    }
     return (
-      <div className="Queue" ref="Queue">
-        <div className="wrapper">
-          {this.props.videos.map(video => (
+      <div className={'Queue' + (this.props.open ? ' open' : '')}>
+        {this.props.videos.length > 0 &&
+          <div className="queue-search-wrapper">
+            <input
+              name="videos-search"
+              placeholder="Search queue..."
+              type="string"
+              className="search"
+              value={this.state.searchTerm}
+              onChange={this.handleSearchChange.bind(this)} />
+            <span className="material-icons searchIcon">search</span>
+          </div>
+        }
+        <div className="wrapper" ref="Queue">
+          {videos.map(video => (
             <QueuedVideo
               key={video.id}
               id={video.id}
@@ -36,12 +63,21 @@ export default class Queue extends Component {
       </div>
     );
   }
+  /**
+   * Update the search term on input.
+   * 
+   * @param {Object} event 
+   */
+  handleSearchChange(event) {
+    this.setState({searchTerm: event.target.value.toLowerCase()});
+  }
 }
 
 Queue.propTypes = {
   selectedId: PropTypes.string,
   videos: PropTypes.array,
-  onSelect: PropTypes.func
+  onSelect: PropTypes.func,
+  open: PropTypes.bool
 };
 
 Queue.defaultProps = {
