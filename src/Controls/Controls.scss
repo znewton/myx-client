@@ -1,0 +1,82 @@
+@import "../sass/globals";
+@import "../sass/mixins";
+
+.Controls {
+  $height: $controls_height - 0.5rem;
+  --height: $height;
+  position: fixed;
+  height: $height;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  transform: translateY($height);
+  @include transition(transform 125ms ease);
+  &.show {
+    transform: translateY(0);
+  }
+  & > * {
+    flex: 1 100%;
+  }
+  .control-bar {
+    background-color: #3e3e3e;
+    color: $default_light_text_color;
+    height: $height;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    @include box-shadow(2px 2px 6px rgba(black, 0.3));
+    & > * {
+      flex: 1 100%;
+    }
+    .thumbnail {
+      height: $height;
+      img {
+        height: $height;
+        width: auto;
+      }
+      @include bp-small {
+        display: none;
+      }
+    }
+    .video-info {
+      padding: 0 1rem;
+      @include bp-medium {
+        max-width: 50vw;
+      }
+      max-height: $height;
+      & > * {
+        max-width: inherit;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      .title {
+        font-size: 1.05em;
+        font-weight: 600;
+        color: $lighter_text_color;
+      }
+    }
+    .separator {
+      height: $height*4/5;
+      width: 2px;
+      background-color: #373737;
+    }
+    .material-icons {
+      $font_size: 40px;
+      font-size: $font_size;
+      padding: 0.5rem;
+      &.sm {
+        font-size: $font_size*3/4;
+      }
+      &:hover {
+        cursor: pointer;
+        text-shadow: 2px 2px 4px rgba(black, 0.2);
+      }
+    }
+  }
+}

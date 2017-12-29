@@ -8,14 +8,16 @@ import queryString from 'query-string';
 
 import FbHelpers from './lib/Firebase/Firebase';
 import { endpoint } from './lib/constants';
+import Events from './lib/Events/Events';
 
 import Navbar from './Navbar/Navbar';
 import MixMenu from './MixMenu/MixMenu';
 import Player from './Player/Player';
 import Queue from './Queue/Queue';
 import Mixer from './Navbar/mixing/Mixer';
+import Controls from './Controls/Controls';
+
 import Modal from './components/Modal/Modal';
-import Events from './lib/Events/Events';
 
 export default class App extends Component {
   constructor () {
@@ -122,6 +124,13 @@ export default class App extends Component {
           onEdit={this.handleMixEditDelete.bind(this)}
           onDelete={this.handleMixEditDelete.bind(this)}
         />
+        <Controls 
+          currentVideo={this.state.selectedMixVideoMap[this.state.selectedVideo]}
+          currentVideoId={this.state.currentVideoId}
+          onNext={this.handleNextVideo.bind(this)}
+          onPrev={this.handlePreviousVideo.bind(this)}
+          onFavorite={() => {}}
+        />
         <Player
           id={this.state.currentVideoId}
           onEnd={this.handleNextVideo.bind(this)}
@@ -145,7 +154,10 @@ export default class App extends Component {
       if (snapshot.val()) {
         let name = snapshot.val().name;
         let playlists = snapshot.val().playlists;
-        this.setState({selectedMixId: mixId, selectedMixName: name});
+        this.setState({
+          selectedMixId: mixId, 
+          selectedMixName: name
+        });
         this.getMixSongs(playlists);
         this.toggleMixMenu();
         this.partialToggleMixMenu(false);
@@ -161,7 +173,10 @@ export default class App extends Component {
    * @param {Object[]} playlists 
    */
   getMixSongs (playlists) {
-    this.setState({loading: true, currentVideoId: null});
+    this.setState({
+      loading: true, 
+      currentVideoId: null
+    });
     let params = queryString.stringify({playlists: playlists});
     axios.get(`${endpoint}/mix?${params}`)
       .then(response => {
@@ -170,7 +185,13 @@ export default class App extends Component {
           let orderedVideos = response.data.orderedVideoIds;
           let firstVideo = videoMap[orderedVideos[0]].resourceId.videoId;
           let firstSelectedVideo = orderedVideos[0];
-          this.setState({loading: false, selectedMixVideoMap: videoMap, selectedMixOrderedVideos: orderedVideos, selectedVideo: firstSelectedVideo, currentVideoId: firstVideo});
+          this.setState({
+            loading: false, 
+            selectedMixVideoMap: videoMap, 
+            selectedMixOrderedVideos: orderedVideos, 
+            selectedVideo: firstSelectedVideo, 
+            currentVideoId: firstVideo
+          });
           document.title = videoMap[orderedVideos[0]].title;
         }
       }).catch(error => console.error(error));
@@ -181,8 +202,20 @@ export default class App extends Component {
    * @param {string} videoId 
    */
   handleVideoSelect (videoId) {
-    this.setState({selectedVideo: videoId, currentVideoId: this.state.selectedMixVideoMap[videoId].resourceId.videoId});
+    this.setState({
+      selectedVideo: videoId, 
+      currentVideoId: this.state.selectedMixVideoMap[videoId].resourceId.videoId
+    });
     document.title = this.state.selectedMixVideoMap[videoId].title;
+  }
+  /**
+   * Update the selected video to be the previous video in the queue.
+   */
+  handlePreviousVideo () {
+    let orderedVideos = this.state.selectedMixOrderedVideos;
+    let currentVideo = this.state.selectedVideo;
+    let previousVideo = orderedVideos[orderedVideos.indexOf(currentVideo) - 1];
+    this.handleVideoSelect(previousVideo);
   }
   /**
    * Update the selected video to be the next video in the queue.
@@ -214,12 +247,16 @@ export default class App extends Component {
 
   partialToggleMixMenu (enter) {
     if (this.state.mixMenuOpen) return;
-    this.setState({partialMixMenuOpen: enter});
+    this.setState({
+      partialMixMenuOpen: enter
+    });
   }
 
   partialToggleQueue (enter) {
     if (this.state.queueOpen) return;
-    this.setState({partialQueueOpen: enter});
+    this.setState({
+      partialQueueOpen: enter
+    });
   }
 
   

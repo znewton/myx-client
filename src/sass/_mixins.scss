@@ -38,13 +38,13 @@ p {
 }
 
 @mixin bp-medium-inverse {
-	@media only screen and (min-width: 50em) {
+	@media only screen and (min-width: 40em) {
 		@content;
 	}
 }
 
 @mixin bp-small-inverse {
-	@media only screen and (min-width: 40em) {
+	@media only screen and (min-width: 30em) {
 		@content;
 	}
 }

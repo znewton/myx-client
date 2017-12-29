@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './Queue.css';
 
 import QueuedVideo from './QueuedVideo/QueuedVideo.js';
+import ClassNameBuilder from '../lib/ClassNameBuilder/ClassNameBuilder';
 
 export default class Queue extends Component {
   constructor () {
@@ -33,11 +34,11 @@ export default class Queue extends Component {
         video.title.toLowerCase().includes(this.state.searchTerm) ||
         video.description.toLowerCase().includes(this.state.searchTerm));
     }
-    let className = 'Queue';
-    if (this.props.open) className += ' open';
-    if (this.props.partialOpen) className += ' part-open';
+    let classNameBuilder = new ClassNameBuilder('Queue');
+    classNameBuilder.add('open', this.props.open);
+    classNameBuilder.add('part-open', this.props.partialOpen);
     return (
-      <div className={className}>
+      <div className={classNameBuilder.className}>
         {this.props.videos.length > 0 &&
           <div className="queue-search-wrapper">
             <input

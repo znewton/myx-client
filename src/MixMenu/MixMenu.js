@@ -6,6 +6,7 @@ import 'firebase/database';
 import './MixMenu.css';
 
 import Mix from './Mix/Mix.js';
+import ClassNameBuilder from '../lib/ClassNameBuilder/ClassNameBuilder';
 
 export default class MixMenu extends Component {
   constructor () {
@@ -32,11 +33,11 @@ export default class MixMenu extends Component {
     });
   }
   render () {
-    let className = 'MixMenu';
-    if (this.props.open) className += ' open';
-    if (this.props.partialOpen) className += ' part-open';
+    let classNameBuilder = new ClassNameBuilder('MixMenu');
+    classNameBuilder.add('open', this.props.open);
+    classNameBuilder.add('part-open', this.props.partialOpen);
     return (
-      <div className={className}>
+      <div className={classNameBuilder.className}>
         {this.state.mixes.length > 0 &&
           <div className="mix-search-wrapper">
             <input

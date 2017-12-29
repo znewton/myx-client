@@ -15,11 +15,10 @@
   @include box-shadow(1px 1px 6px rgba(black, 0.4));
   vertical-align: middle;
   & > :not(.separator) {
-    vertical-align: middle;
     & > span {
       vertical-align: middle;
     }
-    padding: none;
+    padding: 0;
     margin-left: 0 !important;
     font-family: inherit;
     font-size: inherit;
@@ -49,5 +48,10 @@
     background-color: #ddd;
     display: block;
     height: 1px;
+  }
+  .hide-desktop {
+    @include bp-medium-inverse {
+      display: none;
+    }
   }
 }
