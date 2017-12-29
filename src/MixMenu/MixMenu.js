@@ -5,20 +5,14 @@ import 'firebase/auth';
 import 'firebase/database';
 import './MixMenu.css';
 
-import FbHelpers from '../lib/Firebase/Firebase';
 import Mix from './Mix/Mix.js';
-import Mixer from '../Navbar/mixing/Mixer';
-import Modal from '../components/Modal/Modal';
-import Events from '../lib/Events/Events';
 
 export default class MixMenu extends Component {
   constructor () {
     super();
     this.state = {
       mixes: [],
-      searchTerm: '',
-      editModalOpen: null,
-      deleteModalOpen: null,
+      searchTerm: ''
     };
   }
   /**
@@ -33,15 +27,9 @@ export default class MixMenu extends Component {
       if (user) {
         this.setUpList();
       } else {
-        this.setState({mixes: []})
+        this.setState({mixes: []});
       }
     });
-  }
-  componentWillUnmount() {
-    const events = ['editModal', 'deleteModal'];
-    for (let i = 0; i < events.length; i++) {
-      Events.removeOneTimeEvent(`${events[i]}OpenToggle`);
-    }
   }
   render () {
     let className = 'MixMenu';
@@ -64,8 +52,6 @@ export default class MixMenu extends Component {
         <div className="mixes-wrapper">
           {this.mixes()}
         </div>
-        {this.editModal()}
-        {this.deleteModal()}
       </div>
     );
   }
@@ -116,7 +102,7 @@ export default class MixMenu extends Component {
       });
       mixes.sort(this.mixComparator);
       this.setState({mixes});
-    })
+    });
   }
   /**
    * Update the search term on input.
@@ -142,82 +128,14 @@ export default class MixMenu extends Component {
         key={mix.id}
         id={mix.id}
         onClick={() => this.props.onSelect(mix.id)}
-        onEdit={(e) => this.toggleMenu(e, 'editModal', mix.id)}
-        onDelete={(e) => this.toggleMenu(e, 'deleteModal', mix.id)}
+        onEdit={(e) => this.props.onEdit(e, 'edit', mix.id)}
+        onDelete={(e) => this.props.onDelete(e, 'delete', mix.id)}
         name={mix.name}
         channels={mix.channels}
         selected={mix.id === this.props.activeMix}
       />
     ));
   } 
-
-  /**
-   * Mix action functions.
-   */
-  
-  /**
-   * Open/close a menu. Does not add window click event for modals.
-   * 
-   * @param {*} e 
-   * @param {*} name 
-   */
-  toggleMenu(e, name, param) {
-    if (e) e.stopPropagation();
-    let open = this.state[`${name}Open`] ? null : param;
-    this.setState({[`${name}Open`]: open});
-    if (!name.toLowerCase().includes('modal') && open)
-      Events.addOneTimeEvent(window, 'click', () => this.setState({[`${name}Open`]: null}), `${name}OpenToggle`);
-  }
-  /**
-   * Close a menu.
-   * 
-   * @param {*} e 
-   * @param {*} name 
-   */
-  closeMenu(e, name) {
-    if (e) e.stopPropagation();
-    this.setState({[`${name}Open`]: null});
-    Events.removeOneTimeEvent(`${name}OpenToggle`);
-  }
-
-  /**
-   * Create a modal whose open state is handled by this state
-   * 
-   * @param {*} contents
-   * @param {*} header
-   * @param {string} name
-   * @param {string} openFromId
-   */
-  modal = (contents, header, name, openFromId) => 
-    <Modal
-      header={header}
-      handleClose={(e) => this.closeMenu(e, name)}
-      open={this.state[`${name}Open`] !== null}
-      bindTo={openFromId}
-    >
-      {contents}
-    </Modal>
-
-  editModal = () => this.modal(
-    <Mixer close={(e) => this.closeMenu(e, 'editModal')} id={this.state.editModalOpen} />, 
-    'Edit Mix', 'editModal', `Mix_${this.state.editModalOpen}`
-  );
-
-  deleteModal = () => this.modal(
-    this.deleteModalContents(), 'Delete Mix', 'deleteModal', `Mix_${this.state.deleteModalOpen}`
-  );
-
-  deleteModalContents = () => (
-    <div>
-      <div>Are you sure you want to delete this mix?</div>
-      <div className="delete-button-bar">
-        <button className="btn" onClick={(e) => this.closeMenu(e, 'deleteModal')}>Cancel</button>
-        <button className="btn blue" onClick={(e) => {
-          this.closeMenu(e, 'deleteModal');
-          FbHelpers.deleteMix(this.state.deleteModalOpen);
-        }}>Delete</button>
-      </div>
-    </div>);
 }
 
 MixMenu.propTypes = {
@@ -225,8 +143,10 @@ MixMenu.propTypes = {
   onSelect: PropTypes.func,
   open: PropTypes.bool,
   partialOpen: PropTypes.bool,
-}
+  onEdit: PropTypes.func,
+  onDelete: PropTypes.func,
+};
 
 MixMenu.defaultProps = {
   onSelect: () => {}
-}
+};

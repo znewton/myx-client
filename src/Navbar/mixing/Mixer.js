@@ -182,10 +182,8 @@ export default class Mixer extends Component {
    */
   getPlaylistNames(playlists) {
     let params = queryString.stringify({playlists: playlists});
-    console.log(playlists);
     axios.get(`${endpoint}/playlistNames?${params}`)
     .then(response => {
-      console.log(response)
       if (response.data) {
         let playlists = {};
         let responseKeys = Object.keys(response.data);
@@ -199,7 +197,7 @@ export default class Mixer extends Component {
         });
       }
     })
-    .catch(error => console.log(error));
+    .catch(error => console.error(error));
   }
   resetState() {
     this.setState({
@@ -237,7 +235,7 @@ export default class Mixer extends Component {
           this.setState({searching: false, channels: channels});
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
   }
   getPlaylists(channelId) {
     if (this.state.selectedChannel === channelId && this.state.selectedChannelPlaylists !== {}) {
@@ -258,7 +256,7 @@ export default class Mixer extends Component {
           this.setState({selectedChannelPlaylists: playlists});
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
   }
   addPlaylist(id) {
     let mix = this.state.currentMix;
