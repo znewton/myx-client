@@ -39,12 +39,12 @@ class Controls extends Component {
           >
             skip_previous
           </span>
-          <span 
+          {/*<span 
             className="material-icons sm"
             onClick={() => this.props.onFavorite(this.props.currentVideoId)}
           >
             favorite{!this.props.isFavorite && '_border'}
-          </span>
+          </span>*/}
           <span 
             className="material-icons"
             onClick={() => this.props.onNext()}
