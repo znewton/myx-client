@@ -160,10 +160,10 @@ export default class App extends Component {
           selectedMixName: name
         });
         this.getMixSongs(playlists);
-        this.toggleMixMenu();
+        this.toggleMixMenu(false);
         this.partialToggleMixMenu(false);
         setTimeout(() => {
-          this.toggleQueue();
+          this.toggleQueue(true);
         }, 200);
       }
     }).catch(error => console.error(error));
@@ -234,15 +234,15 @@ export default class App extends Component {
     firebase.auth().signOut();
   }
 
-  toggleMixMenu () {
-    let mixMenuOpen = !this.state.mixMenuOpen;
+  toggleMixMenu (override = null) {
+    let mixMenuOpen = override !== null ? override : !this.state.mixMenuOpen;
     this.setState({
       mixMenuOpen: mixMenuOpen
     });
   }
 
-  toggleQueue () {
-    let queueOpen = !this.state.queueOpen;
+  toggleQueue (override = null) {
+    let queueOpen = override !== null ? override : !this.state.queueOpen;
     this.setState({
       queueOpen: queueOpen
     });
