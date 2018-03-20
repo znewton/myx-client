@@ -36,7 +36,7 @@ export default class Mixer extends Component {
         loadingPlaylists: true,
         mixName: mix.name
       });
-      this.getPlaylistNames(mix.playlists)
+      this.getPlaylistNames(mix.playlists);
     });
   }
   componentDidUpdate(prevProps) {
@@ -48,7 +48,7 @@ export default class Mixer extends Component {
         loadingPlaylists: true,
         mixName: mix.name
       });
-      this.getPlaylistNames(mix.playlists)
+      this.getPlaylistNames(mix.playlists);
     });
   }
   render () {
@@ -107,26 +107,30 @@ export default class Mixer extends Component {
   /**
    * Get the empty search state.
    */
-  emptySearchState = () => this.state.searching ?
-    <div className="channel-empty-state loading-dots">Searching</div>
-    : <div className="channel-empty-state">No Results</div>;
+  emptySearchState () {
+    return this.state.searching ?
+      <div className="channel-empty-state loading-dots">Searching</div>
+      : <div className="channel-empty-state">No Results</div>;
+  }
 
   /**
    * Retrieve list of playlists in current mix.
    * 
    * @param {string[]} mixKeys
    */
-  currentMix = (mixKeys) => mixKeys.map(key => {
-    let playlist = this.state.currentMix[key];
-    return (
-      <Playlist
-        key={`mix${key}`}
-        name={<span><strong>{playlist.name}</strong> ({playlist.channel})</span>}
-        action={() => this.removePlaylist(key)}
-        actionIcon="remove"
-      />
-    );
-  });
+  currentMix (mixKeys) {
+    return mixKeys.map(key => {
+      let playlist = this.state.currentMix[key];
+      return (
+        <Playlist
+          key={`mix${key}`}
+          name={<span><strong>{playlist.name}</strong> ({playlist.channel})</span>}
+          action={() => this.removePlaylist(key)}
+          actionIcon="remove"
+        />
+      );
+    });
+  }
 
   /**
    * Retrieve list of channels returned from search.
@@ -134,8 +138,8 @@ export default class Mixer extends Component {
    * @param {string[]} channelKeys
    * @param {string[]} playlistKeys
    */
-  channelSearchResults = (channelKeys, playlistKeys) => 
-    channelKeys.map(key => {
+  channelSearchResults (channelKeys, playlistKeys) { 
+     return channelKeys.map(key => {
       let channel = this.state.channels[key];
       return (
         <div className="channel-result" key={key}>
@@ -154,15 +158,17 @@ export default class Mixer extends Component {
             </div>
           }
         </div>
-    )});
+      );
+    });
+  }
 
   /**
    * Retrieve list of playlists in selected channel.
    * 
    * @param {string[]}
    */
-  channelPlaylists = (playlistKeys) => 
-    playlistKeys.filter(key => !this.state.currentMix[key]).map(key => (
+  channelPlaylists (playlistKeys) {
+    return playlistKeys.filter(key => !this.state.currentMix[key]).map(key => (
       <Playlist
         key={key}
         name={this.state.selectedChannelPlaylists[key].name}
@@ -170,6 +176,7 @@ export default class Mixer extends Component {
         actionIcon="add"
       />
     ));
+  }
 
   /**
    * Miscellaneous Functions
@@ -180,7 +187,7 @@ export default class Mixer extends Component {
    * 
    * @param {string[]} playlists
    */
-  getPlaylistNames(playlists) {
+  getPlaylistNames (playlists) {
     let params = queryString.stringify({playlists: playlists});
     axios.get(`${endpoint}/playlistNames?${params}`)
     .then(response => {
@@ -199,7 +206,7 @@ export default class Mixer extends Component {
     })
     .catch(error => console.error(error));
   }
-  resetState() {
+  resetState () {
     this.setState({
       searchTerm: '',
       channels: {},
@@ -209,12 +216,12 @@ export default class Mixer extends Component {
       mixName: 'Mix_' + Math.random().toString(36).substring(7)
     });
   }
-  handleSearchInput(value) {
+  handleSearchInput (value) {
     this.setState({searchTerm: value});
     this.search();
   }
-  search() {
-    this.setState({searching: true, selectedChannel: null, selectedChannelPlaylists: {}})
+  search () {
+    this.setState({searching: true, selectedChannel: null, selectedChannelPlaylists: {}});
     if (this.state.searchTerm === '') {
       this.setState({searching: false, channels: {}});
       return;
@@ -230,7 +237,7 @@ export default class Mixer extends Component {
               title: channel.channelTitle,
               description: channel.description,
               thumbnail: channel.thumbnails.default.url
-            }
+            };
           }
           this.setState({searching: false, channels: channels});
         }
@@ -251,7 +258,7 @@ export default class Mixer extends Component {
             let playlist = response.data[i];
             playlists[playlist.id] = {
               name: playlist.snippet.title
-            }
+            };
           }
           this.setState({selectedChannelPlaylists: playlists});
         }
@@ -263,7 +270,7 @@ export default class Mixer extends Component {
     mix[id] = {
       name: this.state.selectedChannelPlaylists[id].name,
       channel: this.state.channels[this.state.selectedChannel].title
-    }
+    };
     this.setState({currentMix: mix});
   }
   removePlaylist(id) {
@@ -298,8 +305,8 @@ export default class Mixer extends Component {
 Mixer.propTypes = {
   close: PropTypes.func,
   id: PropTypes.string
-}
+};
 
 Mixer.defaultProps = {
   close: () => {}
-}
+};

@@ -25,7 +25,7 @@ export default class Navbar extends Component {
       helpModalOpen: false,
       // auth
       authType: 'login'
-    }
+    };
   }
   /**
    * React Life-cycle Functions
@@ -106,7 +106,7 @@ export default class Navbar extends Component {
    * @param {*} e 
    * @param {string} type 
    */
-  handleAuthClick(e, type) {
+  handleAuthClick (e, type) {
     e.stopPropagation();
     this.setState({authModalOpen: true, authType: type});
     Events.addOneTimeEvent(window, 'click', () => this.setState({authModalOpen: false}), 'authModalOpenToggle');
@@ -114,7 +114,7 @@ export default class Navbar extends Component {
   /**
    * Sign out the user through Firebase.
    */
-  handleSignOut() {
+  handleSignOut () {
     this.props.signOut();
   }
   /**
@@ -123,7 +123,7 @@ export default class Navbar extends Component {
    * @param {*} e 
    * @param {*} name 
    */
-  toggleMenu(e, name) {
+  toggleMenu (e, name) {
     if (e) e.stopPropagation();
     let open = !this.state[`${name}Open`];
     this.setState({[`${name}Open`]: open});
@@ -136,7 +136,7 @@ export default class Navbar extends Component {
    * @param {*} e 
    * @param {*} name 
    */
-  closeMenu(e, name) {
+  closeMenu (e, name) {
     if (e) e.stopPropagation();
     this.setState({[`${name}Open`]: false});
     Events.removeOneTimeEvent(`${name}OpenToggle`);
@@ -145,24 +145,32 @@ export default class Navbar extends Component {
   /**
    * Modals
    */
-  authModal = () => this.modal(
-    <Auth type={this.state.authType} close={(e) => this.closeMenu(e, 'authModal')} />,
-    this.state.authType.charAt(0).toUpperCase() + this.state.authType.slice(1),
-    'authModal', '#authOpener'
-  );
+  authModal () {
+    return this.modal(
+      <Auth type={this.state.authType} close={(e) => this.closeMenu(e, 'authModal')} />,
+      this.state.authType.charAt(0).toUpperCase() + this.state.authType.slice(1),
+      'authModal', '#authOpener'
+    );
+  }
 
-  createMixModal = () => this.modal(
-    <Mixer close={(e) => this.closeMenu(e, 'createMixModal')} />, 
-    'Create Mix', 'createMixModal', '#create_mix_button'
-  );
+  createMixModal () {
+    return this.modal(
+      <Mixer close={(e) => this.closeMenu(e, 'createMixModal')} />, 
+      'Create Mix', 'createMixModal', '#create_mix_button'
+    );
+  }
 
-  aboutModal = () => this.modal(
-    <About />, <h2>Welcome to <Logo />!</h2>, 'aboutModal', '#settings_button'
-  );
+  aboutModal () {
+    return this.modal(
+      <About />, <h2>Welcome to <Logo />!</h2>, 'aboutModal', '#settings_button'
+    );
+  }
 
-  helpModal = () => this.modal(
-    <Help />, 'Help', 'helpModal', '#settings_button'
-  );
+  helpModal () {
+    return this.modal(
+      <Help />, 'Help', 'helpModal', '#settings_button'
+    );
+  }
 
   /**
    * Create a modal whose open state is handled by this state
@@ -172,24 +180,25 @@ export default class Navbar extends Component {
    * @param {string} name
    * @param {string} openFromId
    */
-  modal = (contents, header, name, openFromId) => 
-    <Modal
+  modal (contents, header, name, openFromId) { 
+    return <Modal
       header={header}
       handleClose={(e) => this.closeMenu(e, name)}
       open={this.state[`${name}Open`]}
       bindTo={openFromId}
     >
       {contents}
-    </Modal>
+    </Modal>;
+  }
   
   /**
    * Side Menus
    */
   toggleLeftMenu () {
-    this.props.toggleLeftMenu()
+    this.props.toggleLeftMenu();
   }
   toggleRightMenu () {
-    this.props.toggleRightMenu()
+    this.props.toggleRightMenu();
   }
 }
 
@@ -203,7 +212,7 @@ Navbar.propTypes = {
   rightMenuOpen: PropTypes.bool,
   toggleRightMenu: PropTypes.func,
   partialToggleRightMenu: PropTypes.func,
-}
+};
 
 Navbar.defaultProps = {
   currentMixName: '',
@@ -211,4 +220,4 @@ Navbar.defaultProps = {
   partialToggleLeftMenu: () => {},
   toggleRightMenu: () => {},
   partialToggleRightMenu: () => {},
-}
+};

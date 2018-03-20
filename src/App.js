@@ -128,8 +128,9 @@ export default class App extends Component {
           currentVideo={this.state.selectedMixVideoMap[this.state.selectedVideo]}
           currentVideoId={this.state.currentVideoId}
           onNext={this.handleNextVideo.bind(this)}
-          onPrev={this.handlePreviousVideo.bind(this)}
+          onPrevious={this.handlePreviousVideo.bind(this)}
           onFavorite={() => {}}
+          isFirstVideo={this.state.selectedMixOrderedVideos.indexOf(this.state.selectedVideo) === 0}
         />
         <Player
           id={this.state.currentVideoId}
@@ -214,7 +215,9 @@ export default class App extends Component {
   handlePreviousVideo () {
     let orderedVideos = this.state.selectedMixOrderedVideos;
     let currentVideo = this.state.selectedVideo;
-    let previousVideo = orderedVideos[orderedVideos.indexOf(currentVideo) - 1];
+    let previousVideoIndex = orderedVideos.indexOf(currentVideo) - 1;
+    if (previousVideoIndex < 0) return;
+    let previousVideo = orderedVideos[previousVideoIndex];
     this.handleVideoSelect(previousVideo);
   }
   /**
@@ -301,34 +304,42 @@ export default class App extends Component {
    * @param {string} name
    * @param {string} openFromId
    */
-  modal = (contents, header, name, openFromId) => 
-    <Modal
+  modal (contents, header, name, openFromId) { 
+    return <Modal
       header={header}
       handleClose={(e) => this.closeMixEditDeleteMenu(e, name)}
       open={this.state[`${name}Open`] !== null}
       bindTo={openFromId}
     >
       {contents}
-    </Modal>
+    </Modal>;
+  }
 
-  editMixModal = () => this.modal(
-    <Mixer close={(e) => this.closeMixEditDeleteMenu(e, 'editMixModal')} id={this.state.editMixModalOpen} />, 
-    'Edit Mix', 'editMixModal', `Mix_${this.state.editMixModalOpen}`
-  );
+  editMixModal () {
+    return this.modal(
+      <Mixer close={(e) => this.closeMixEditDeleteMenu(e, 'editMixModal')} id={this.state.editMixModalOpen} />, 
+      'Edit Mix', 'editMixModal', `Mix_${this.state.editMixModalOpen}`
+    );
+  }
 
-  deleteMixModal = () => this.modal(
-    this.deleteMixModalContents(), 'Delete Mix', 'deleteMixModal', `Mix_${this.state.deleteMixModalOpen}`
-  );
+  deleteMixModal () {
+    return this.modal(
+      this.deleteMixModalContents(), 'Delete Mix', 'deleteMixModal', `Mix_${this.state.deleteMixModalOpen}`
+    );
+  }
 
-  deleteMixModalContents = () => (
-    <div className="delete-modal-content">
-      <div>Are you sure you want to delete this mix?</div>
-      <div className="delete-button-bar">
-        <button className="btn" onClick={(e) => this.closeMixEditDeleteMenu(e, 'deleteMixModal')}>Cancel</button>
-        <button className="btn blue" onClick={(e) => {
-          this.closeMenu(e, 'deleteMixModal');
-          FbHelpers.deleteMix(this.state.deleteMixModalOpen);
-        }}>Delete</button>
+  deleteMixModalContents () {
+    return (
+      <div className="delete-modal-content">
+        <div>Are you sure you want to delete this mix?</div>
+        <div className="delete-button-bar">
+          <button className="btn" onClick={(e) => this.closeMixEditDeleteMenu(e, 'deleteMixModal')}>Cancel</button>
+          <button className="btn blue" onClick={(e) => {
+            this.closeMenu(e, 'deleteMixModal');
+            FbHelpers.deleteMix(this.state.deleteMixModalOpen);
+          }}>Delete</button>
+        </div>
       </div>
-    </div>);
+    );
+  }
 }

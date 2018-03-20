@@ -20,6 +20,8 @@ class Controls extends Component {
       description = this.props.currentVideo.channelTitle;
       imgUrl = this.props.currentVideo.thumbnails.medium.url;
     }
+    let skipPreviousCNB = new ClassNameBuilder('material-icons');
+    skipPreviousCNB.add('disabled', this.props.isFirstVideo);
     return (
       <div className={classNameBuilder.className}>
         <div className="control-bar">
@@ -34,7 +36,9 @@ class Controls extends Component {
           </span>
           <span className="separator"></span>
           <span 
-            className="material-icons"
+            className={skipPreviousCNB.className}
+            title="Previous video"
+            disabled={this.props.isFirstVideo ? 'true' : 'false'}
             onClick={() => this.props.onPrevious()}
           >
             skip_previous
@@ -47,6 +51,7 @@ class Controls extends Component {
           </span>*/}
           <span 
             className="material-icons"
+            title="Next video"
             onClick={() => this.props.onNext()}
           >
             skip_next
@@ -64,10 +69,12 @@ Controls.propTypes = {
   onNext: PropTypes.func,
   onPrevious: PropTypes.func,
   onFavorite: PropTypes.func,
+  isFirstVideo: PropTypes.bool
 };
 
 Controls.defaultProps = {
   isFavorite: false,
+  isFirstVideo: false,
   onNext: () => {},
   onPrevious: () => {},
   onFavorite: () => {},

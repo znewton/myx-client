@@ -77,6 +77,13 @@
         cursor: pointer;
         text-shadow: 2px 2px 4px rgba(black, 0.2);
       }
+      &:disabled, &.disabled {
+        opacity: 0.5;
+        &:hover {
+          cursor: default;
+          text-shadow: none;
+        }
+      }
     }
   }
 }
