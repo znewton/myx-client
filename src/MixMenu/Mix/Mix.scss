@@ -3,8 +3,10 @@
 @import "../../sass/mixin";
 
 .Mix {
-  $width: $side_menu_width*94/100;
+  $width: 94%;
   --width: $width;
+  $title_height: 1.45em;
+  --title-height: $title_height;
   width: $width;
   height: 5em;
   padding: 0.2em 0.5em;
@@ -33,13 +35,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
     width: calc(var(--width) - 2rem);
-    height: 1.45em;
+    height: $title_height;
   }
   .description {
     width: calc(var(--width) - 2rem);
     overflow: hidden;
     text-overflow: ellipsis;
-    height: calc(100% - 1.4em);
+    height: calc(calc(100% - var(--title-height) - 0.2em));
     .span:not(:last-of-type)::after {
       content: ", ";
     }
