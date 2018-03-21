@@ -3,7 +3,7 @@
 @import "../../sass/mixin";
 
 .QueuedVideo {
-  $width: $side_menu_width*94/100;
+  $width: 94%;
   --width: $width;
   $height: 4rem;
   --height: $height;

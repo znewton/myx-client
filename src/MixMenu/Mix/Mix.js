@@ -35,9 +35,9 @@ Mix.propTypes = {
   onEdit: PropTypes.func,
   onClick: PropTypes.func,
   onDelete: PropTypes.func,
-}
+};
 
 Mix.defaultProps = {
   selected: false,
   id: Math.floor(Math.random() * 1000)
-}
+};

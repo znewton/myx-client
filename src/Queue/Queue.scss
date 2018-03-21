@@ -38,6 +38,10 @@
     padding: $side_menu_width*3/100;
     padding-top: 0.3rem;
     background-color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     // width: 94%;
     // margin: 0 3% 3% 3%;
     input {
