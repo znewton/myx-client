@@ -1,5 +1,5 @@
 import React from 'react';
-import './GoogleButton.css';
+import './GoogleButton.scss';
 import logo from '../../../assets/Google_-G-_Logo.svg.png';
 
 const GoogleButton = (props) => (

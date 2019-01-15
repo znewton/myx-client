@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './sass/App.css';
+import './sass/App.scss';
 import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/auth';

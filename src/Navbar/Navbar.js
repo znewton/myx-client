@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './Navbar.css';
+import './Navbar.scss';
 
 import Logo from '../components/Logo/Logo';
 import Auth from './auth/Auth';

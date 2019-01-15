@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './Mix.css';
+import './Mix.scss';
 
 export default class Mix extends Component {
   render () {

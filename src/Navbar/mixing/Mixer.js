@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import queryString from 'query-string';
-import './Mixer.css';
+import './Mixer.scss';
 
 import { endpoint } from '../../lib/constants';
 

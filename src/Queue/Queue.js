@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './Queue.css';
+import './Queue.scss';
 
 import QueuedVideo from './QueuedVideo/QueuedVideo.js';
 import ClassNameBuilder from '../lib/ClassNameBuilder/ClassNameBuilder';

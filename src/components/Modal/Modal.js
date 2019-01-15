@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './Modal.css';
+import './Modal.scss';
 import { addEndEventListener, removeEndEventListener } from '../../lib/Events/Events';
 import Positioning from '../../lib/Positioning/Positioning';
 

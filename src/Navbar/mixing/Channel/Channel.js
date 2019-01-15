@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './Channel.css';
+import './Channel.scss';
 
 export default class Channel extends Component {
   render () {

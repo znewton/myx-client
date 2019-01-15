@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
-import './About.css';
+import './About.scss';
 
 import Logo from '../../components/Logo/Logo'
 

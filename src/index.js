@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import fapp from 'firebase/app';
 import registerServiceWorker from './registerServiceWorker';
-import './sass/index.css';
+import './sass/index.scss';
 
 const config = {
   apiKey: "AIzaSyCcCJOhAOAXQIUR17x2Uy_Gbo5W1kWHrWk",

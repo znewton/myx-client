@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './QueuedVideo.css';
+import './QueuedVideo.scss';
 
 export default class QueuedVideo extends Component {
   render () {

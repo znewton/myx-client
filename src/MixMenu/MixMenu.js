@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import './MixMenu.css';
+import './MixMenu.scss';
 
 import Mix from './Mix/Mix.js';
 import ClassNameBuilder from '../lib/ClassNameBuilder/ClassNameBuilder';

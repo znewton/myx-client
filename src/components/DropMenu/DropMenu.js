@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './DropMenu.css';
+import './DropMenu.scss';
 import { addEndEventListener } from '../../lib/Events/Events';
 import Positioning from '../../lib/Positioning/Positioning';
 

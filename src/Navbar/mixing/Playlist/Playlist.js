@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './Playlist.css';
+import './Playlist.scss';
 
 export default class Playlist extends Component {
   render () {
