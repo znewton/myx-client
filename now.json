@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "name": "myx-client",
+  "alias": ["myx.znewton.xyz", "www.myx.znewton.xyz"],
+  "build": {
+    "env": {
+      "NODE_PATH": "src/",
+      "compress": "false"
+    }
+  },
+  "builds": [
+    { "src": "package.json", "use": "@now/static-build", "config": { "distDir": "build" } }
+  ]
+}
